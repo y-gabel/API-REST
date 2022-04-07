@@ -7,25 +7,30 @@
 			if (isset($_POST["idCompetence"])){
 				$id = $_POST["idCompetence"];
 			} else {
-				return echo(json_encode(reponseMauvaiseRqt());
+			    echo(json_encode(Util::reponseMauvaiseRqt()));
+                return;
 			}
 
-				if ($rep = getCompetencByID($id)) {
-					$reponse = reponseOk("Voici la compétence qui a pour id $id ",$rep);
-					return echo(json_encode($reponse)));
+				if ($rep = Competence::getCompetencByID($id)) {
+					$reponse = Util::reponseOk("Voici la compétence qui a pour id $id ",$rep);
+					echo(json_encode($reponse));
 				} else {
-					return echo(json_encode(reponseNonTrouver());
+				    echo(json_encode(Util::reponseNonTrouver()));
 				}
+
+            return;
 		}
 
 		public static function getAllCompetences(){
 			
-				if ($rep = getCompetencByID($)) {
-					$reponse = reponseOk("Voici les compétences",$rep);
-					return echo(json_encode($reponse)));
+				if ($rep = Competence::getAllCompetences()) {
+					$reponse = Util::reponseOk("Voici les compétences",$rep);
+					echo(json_encode($reponse));
 				} else {
-					return echo(json_encode(reponseNonTrouver());
+				    echo(json_encode(Util::reponseNonTrouver()));
 				}
+
+				return;
 		}
 	}
 ?>

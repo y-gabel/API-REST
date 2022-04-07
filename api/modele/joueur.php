@@ -5,14 +5,14 @@
 		/////////////////                                         ATTRIBUTS                                            ///////////////// 
 		------------------------------------------------------------------------------------------------------------------------------*/       
 
-		private $idJoueur;
-		private $mail;
-		private $password;
-		private $dateInscription;
-		private $nom;
-		private $prenom;
-        private $thunasse;
-        private $niveau;
+		public $idJoueur;
+        public $mail;
+        public $password;
+        public $dateInscription;
+        public $nom;
+        public $prenom;
+        public $thunasse;
+        public $niveau;
 
         /*------------------------------------------------------------------------------------------------------------------------------
 		/////////////////                                         GETTERS                                              ///////////////// 
@@ -44,15 +44,15 @@
 		/////////////////                                         CONSTRUCTORS                                         ///////////////// 
 		------------------------------------------------------------------------------------------------------------------------------*/
 
-        public function __construct($id = NULL, $m = NULL, $pass = NULL, $d = NULL, $n = NULL, $pr = NULL, $t = NULL, $niv = NULL)  {
-            $this->idJoueur = $id;
-            $this->mail = $m;
-            $this->password = util::hash($pass);
-            $this->dateInscription = $d;
-            $this->nom = $n;
-            $this->prenom = $pr;
-            $this->thunasse = $t;
-            $this->niveau = $niv;
+        public function __construct($tab){
+            $this->idJoueur = $tab["idJoueur"];
+            $this->mail = $tab["mail"];
+            $this->password = $tab["mdp"];
+            $this->dateInscription = $tab["dateInscription"];
+            $this->nom = $tab["nom"];
+            $this->prenom = $tab["prenom"];
+            $this->thunasse = $tab["solde"];
+            $this->niveau = $tab["niveau"];
         }
 
         /*------------------------------------------------------------------------------------------------------------------------------
@@ -69,19 +69,18 @@
 		 * 					
 		 */
 
-        public function getJoueurById($idJoueur){
-            $requetePreparee = "SELECT * FROM Joueur WHERE login = :id_tag ;";
+        public static function getJoueurById($i){
+            $requetePreparee = "SELECT * FROM Joueur where idJoueur = :i_tag";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("id_tag" => $idJoueur);
-
+            $valeurs = array(
+                "i_tag" => $i
+            );
             $req_prep->execute($valeurs);
             if ($req_prep->rowCount() == 0) { return false;}
 
-            $req_prep->setFetchMode(PDO::FETCH_CLASS,"Joueur");
-		    $tabJoueur = $req_prep->fetchAll();
-		    return $tabJoueur;
+            $resultat = $req_prep->fetch(PDO::FETCH_ASSOC);
+            return new Joueur($resultat);
         }
-
         /**
 		 * Retourne le joueur ayant pour mail, le mail passé en paramètre
 		 *
@@ -92,8 +91,8 @@
 		 * 					
 		 */
 
-        public function getJoueurByMail($mail){
-            $requetePreparee = "SELECT * FROM Joueur WHERE login = :m_tag ;";
+        public static function getJoueurByMail($mail){
+            $requetePreparee = "SELECT * FROM Joueur WHERE mail = :m_tag ;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("m_tag" => $mail);
 
@@ -122,7 +121,7 @@
 		 * 					
 		 */
 
-        public function insertJoueur($id, $mail, $pass, $dateInsc, $nom, $pre, $thune, $niv) {
+        public static function insertJoueur($id, $mail, $pass, $dateInsc, $nom, $pre, $thune, $niv) {
             $passHash = util::hash($pass);
             $requetePreparee = "INSERT INTO Joueur (idJoueur, mail, password, dateInscription, nom, prenom, thunasse, niveau) 
             VALUES (:id_tag, :m_tag, :pass_tag, :insc_tag, :n_tag , :p_tag, :thune_tag, :niv_tag );"; 
@@ -164,7 +163,7 @@
 		 * 					
 		 */
 
-        public function updateJoueur($id, $mail, $pass, $nom, $pre, $thune, $niv){
+        public static function updateJoueur($id, $mail, $pass, $nom, $pre, $thune, $niv){
             $passHash = util::hash($pass);
             $requetePreparee = "UPDATE Joueur SET mail = :m_tag, password = :pass_tag, thunasse = :thune_tag, niveau = :niv_tag , nom = :n_tag , prenom = :p_tag 
             WHERE idJoueur = :id_tag";
@@ -198,7 +197,7 @@
 		 * 					
 		 */
 
-        public function deleteJoueurByMail($mail){
+        public static function deleteJoueurByMail($mail){
             $requetePreparee = "DELETE FROM Joueur WHERE mail = :m_tag ;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("m_tag" => $mail);
@@ -213,7 +212,7 @@
         }
 
 
-        public function deleteJoueurByID($idJoueur){
+        public static function deleteJoueurByID($idJoueur){
             $requetePreparee = "DELETE FROM Joueur WHERE idJoueur = :i_tag ;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("i_tag" => $idJoueur);
@@ -297,7 +296,7 @@
         }
 
 
-        public function getLesCompetencesDebloques($idJoueur)
+        public static function getLesCompetencesDebloques($idJoueur)
         {
             $requetePreparee = " SELECT * FROM Competence WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :i_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
@@ -316,7 +315,7 @@
                 return $tab;
             }
         }
-        public function getLesCompetencesNonDebloques($idJoueur)
+        public static function getLesCompetencesNonDebloques($idJoueur)
         {
             $requetePreparee = " SELECT * FROM Competence WHERE idCompetence not in (select idCompetence from ADebloque WHERE idJoueur = :i_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
@@ -335,7 +334,7 @@
                 return $tab;
             }
         }
-        public function getLesCompetencesUtilise($idJoueur)
+        public static function getLesCompetencesUtilise($idJoueur)
         {
             $requetePreparee = " SELECT * FROM Competence WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :i_tag and utilise = 1);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);

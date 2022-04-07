@@ -1,8 +1,8 @@
 <?php
 
 class Connexion {
-	static private $hostname = "projets.iut-orsay.fr";
-	static private $database = "AS-GRP-2022";
+	static private $hostname = "localhost";
+	static private $database = "prj-as-2002";
 	static private $login = "prj-as-2002";
 	static private $password = "EGlp1Q2yix1xK7yC";
 	
