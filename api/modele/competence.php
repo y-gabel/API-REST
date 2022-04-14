@@ -33,7 +33,7 @@
 
 		
 		public static function getCompetencByID($id){
-			$requetePreparee = "SELECT * FROM Competence WHERE idCompetence = :i_tag";
+			$requetePreparee = "SELECT * FROM COMPETENCE WHERE idCompetence = :i_tag";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
 				"i_tag" => $id

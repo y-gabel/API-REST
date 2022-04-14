@@ -33,7 +33,7 @@
 
 		
 		static function getZoneById($id){
-			$requetePreparee = "SELECT * FROM zone WHERE idZone = :i_tag";
+			$requetePreparee = "SELECT * FROM ZONE WHERE idZone = :i_tag";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
 				"i_tag" => $id
@@ -50,7 +50,7 @@
 		
 		static function getNearestZones($latitude,$longitude){
 			$requetePreparee = "SELECT latitude, longitude, SQRT(POW(69.1 * (latitude - :la_tag), 2) + POW(69.1 * (:lo_tag - longitude) * COS(latitude / 57.3), 2)) AS distance
-								FROM Zone ORDER BY distance";
+								FROM ZONE ORDER BY distance";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
 				"la_tag" => $latitude,

@@ -21,7 +21,7 @@
 
 		
 		static function getSousZoneById($id){
-			$requetePreparee = "SELECT * FROM souszone WHERE idSousZone = :i_tag";
+			$requetePreparee = "SELECT * FROM SOUSZONE WHERE idSousZone = :i_tag";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
 				"i_tag" => $id
@@ -38,7 +38,7 @@
 		
 		static function getNearestSousZonesByZoneID($idZone,$latitude,$longitude){
 			$requetePreparee = "SELECT latitude, longitude, SQRT(POW(69.1 * (latitude - :la_tag), 2) + POW(69.1 * (:lo_tag - longitude) * COS(latitude / 57.3), 2)) AS distance
-								FROM SousZone JOIN Zone ON Zone.idZone = SousZone.idSousZone 
+								FROM SOUSZONE JOIN Zone ON Zone.idZone = SousZone.idSousZone 
 								WHERE idZone = :i_tag
 								ORDER BY distance";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);

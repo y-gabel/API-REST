@@ -165,7 +165,7 @@
 
         public static function updateJoueur($id, $mail, $pass, $nom, $pre, $thune, $niv){
             $passHash = util::hash($pass);
-            $requetePreparee = "UPDATE Joueur SET mail = :m_tag, password = :pass_tag, thunasse = :thune_tag, niveau = :niv_tag , nom = :n_tag , prenom = :p_tag 
+            $requetePreparee = "UPDATE JOUEUR SET mail = :m_tag, password = :pass_tag, thunasse = :thune_tag, niveau = :niv_tag , nom = :n_tag , prenom = :p_tag 
             WHERE idJoueur = :id_tag";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array(
@@ -198,7 +198,7 @@
 		 */
 
         public static function deleteJoueurByMail($mail){
-            $requetePreparee = "DELETE FROM Joueur WHERE mail = :m_tag ;";
+            $requetePreparee = "DELETE FROM JOUEUR WHERE mail = :m_tag ;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("m_tag" => $mail);
         
@@ -213,7 +213,7 @@
 
 
         public static function deleteJoueurByID($idJoueur){
-            $requetePreparee = "DELETE FROM Joueur WHERE idJoueur = :i_tag ;";
+            $requetePreparee = "DELETE FROM JOUEUR WHERE idJoueur = :i_tag ;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("i_tag" => $idJoueur);
         
@@ -250,7 +250,7 @@
 		 */
 
         public static function checkMDP($id,$m) {
-            $requetePreparee = "SELECT * FROM Joueur WHERE idJoueur = :id_tag and password = :m_tag;";
+            $requetePreparee = "SELECT * FROM JOUEUR WHERE idJoueur = :id_tag and password = :m_tag;";
             $req_prep = connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("id_tag" => $id, "m_tag" => util::hash($m));
             $req_prep->execute($valeurs);
@@ -265,7 +265,7 @@
 
 
         public static function getLesParties($idJoueur){
-            $requetePreparee = "SELECT * FROM Partie WHERE idPartie in (select idPartie from Participe WHERE idJoueur = :i_tag);";
+            $requetePreparee = "SELECT * FROM PARTIE WHERE idPartie in (select idPartie from PARTICIPE WHERE idJoueur = :i_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("i_tag" => $idJoueur);
             $req_prep->execute($valeurs);
@@ -282,7 +282,7 @@
             }
         }
         public static function getPartieActuel($idJoueur){
-            $requetePreparee = "SELECT * FROM Participe JOIN Partie ON Partie.idPartie = Participe.idPartie WHERE Participe.idJoueur = :i_tag and enCours = 1;";
+            $requetePreparee = "SELECT * FROM PARTICIPE JOIN PARTIE ON PARTIE.idPartie = PARTICIPE.idPartie WHERE PARTICIPE.idJoueur = :i_tag and enCours = 1;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("i_tag" => $idJoueur);
             $req_prep->execute($valeurs);
@@ -298,7 +298,7 @@
 
         public static function getLesCompetencesDebloques($idJoueur)
         {
-            $requetePreparee = " SELECT * FROM Competence WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :i_tag);";
+            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :i_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("i_tag" => $idJoueur);
 
@@ -317,7 +317,7 @@
         }
         public static function getLesCompetencesNonDebloques($idJoueur)
         {
-            $requetePreparee = " SELECT * FROM Competence WHERE idCompetence not in (select idCompetence from ADebloque WHERE idJoueur = :i_tag);";
+            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence not in (select idCompetence from ADebloque WHERE idJoueur = :i_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("i_tag" => $idJoueur);
 
@@ -336,7 +336,7 @@
         }
         public static function getLesCompetencesUtilise($idJoueur)
         {
-            $requetePreparee = " SELECT * FROM Competence WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :i_tag and utilise = 1);";
+            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :i_tag and utilise = 1);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("i_tag" => $idJoueur);
 
