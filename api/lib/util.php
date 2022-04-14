@@ -22,6 +22,19 @@ class Util {
         return true;
     }
 
+
+    /**
+     *
+     */
+
+    public static function formateTabJson($tab){
+        $formattedTab = array();
+        foreach($tab as $unObjet){
+            $formattedTab[] = get_object_vars($unObjet);
+        }
+        return $formattedTab;
+    }
+
     /**
      * Retourne une array contenant les informations passé en parametre
      *

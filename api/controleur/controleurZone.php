@@ -12,7 +12,7 @@
             $longitude = $_POST["longitude"];
 
 			if ($rep = Zone::getNearestZones($latitude,$longitude)) {
-			    $reponse = Util::reponseOk("Voici toutes les zones proches de la position actuelle",$rep);
+			    $reponse = Util::reponseOk("Voici toutes les zones proches de la position actuelle",Util::formateTabJson($rep));
 			    echo(json_encode($reponse));
 			} else {
 			    echo(json_encode(Util::reponseNonTrouver()));

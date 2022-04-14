@@ -1,12 +1,12 @@
 <?php 
 	require_once("config/Connexion.php");
 	class Partie {
-		private $idPartie;
-		private $datePartie;
-		private $nbMaxJoueur;
-		private $tempsLimite;
-		private $enCours;
-		private $finie;
+        public $idPartie;
+        public $datePartie;
+        public $nbMaxJoueur;
+        public $tempsLimite;
+        public $enCours;
+        public $finie;
 
 		public function __construct($tab){
 				$this->idPartie = $tab["idPartie"];
@@ -72,11 +72,11 @@
 			$resultat = Connexion::pdo()->query($requete);
 			
 			$tableau = $resultat->fetchAll(PDO::FETCH_ASSOC);
-			var_dump($tableau);
+
 			foreach($tableau as $key => $val){
 				$tab[] = new Partie($val);
 			}
-			
+
 			return $tab;
 		}
 		// ajoute partie

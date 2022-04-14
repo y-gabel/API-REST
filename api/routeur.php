@@ -21,23 +21,23 @@
 			controleurJoueur::$action();
 
 			break;
-		case "ControleurPartie":
-			require_once("controleur/ControleurPartie.php");
+		case "controleurPartie":
+			require_once("controleur/controleurPartie.php");
 			ControleurPartie::$action();
 
 			break;
-		case "ControleurZone":
-			require_once("controleur/ControleurZone.php");
+		case "controleurZone":
+			require_once("controleur/controleurZone.php");
 			ControleurZone::$action();
 
 			break;
-		case "ControleurSousZone":
-			require_once("controleur/ControleurSousZone.php");
+		case "controleurSousZone":
+			require_once("controleur/controleurSousZone.php");
 			ControleurSousZone::$action();
 
 			break;
-		case "ControleurCompetence":
-			require_once("controleur/ControleurCompetence.php");
+		case "controleurCompetence":
+			require_once("controleur/controleurCompetence.php");
 			ControleurCompetence::$action();
 
 			break;

@@ -1,11 +1,11 @@
 <?php 
 	class Competence {
-		private $idCompetence;
-		private $nom;
-		private $description;
-		private $cooldown;
-		private $scoreMinimal;
-		private $prix;
+        public $idCompetence;
+        public $nom;
+        public $description;
+        public $cooldown;
+        public $scoreMinimal;
+        public $prix;
 		
 		public function __construct($tab){
 				$this->idCompetence = $tab["idSousZone"];

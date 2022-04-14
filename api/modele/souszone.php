@@ -1,8 +1,8 @@
 <?php 
 	class SousZone {
-		private $idSousZone;
-		private $nomSousZone;
-		private $positionSousZone;
+        public $idSousZone;
+        public $nomSousZone;
+        public $positionSousZone;
 		
 		public function __construct($tab){
 				$this->idSousZone = $tab["idSousZone"];

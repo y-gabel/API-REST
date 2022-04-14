@@ -43,7 +43,7 @@
                 $idJoueur = $_POST["idJoueur"];
 
                 if ( $rep = Joueur::getLesParties($idJoueur) ){
-                    $reponse = Util::reponseOk("Voici les parties du joueur ayant pour id $idJoueur ",$rep);
+                    $reponse = Util::reponseOk("Voici les parties du joueur ayant pour id $idJoueur ",Util::formateTabJson($rep));
                     echo(json_encode($reponse));
                 } else {
                      echo(json_encode(Util::reponseNonTrouver()));
@@ -95,7 +95,7 @@
                 $id = $_POST["idJoueur"];
 
                 if ( $rep = Joueur::getLesCompetencesDebloques($id) ){
-                    $reponse = Util::reponseOk("voici les compétences debloqués pour le joueur ayant pour idJoueur $id ",$rep);
+                    $reponse = Util::reponseOk("voici les compétences debloqués pour le joueur ayant pour idJoueur $id ",Util::formateTabJson($rep));
                      echo(json_encode($reponse));
 
                 } else {
@@ -111,7 +111,7 @@
                 $id = $_POST["idJoueur"];
 
                 if ( $rep = Joueur::getLesCompetencesNonDebloques($id) ){
-                    $reponse = Util::reponseOk("voici les compétences non debloqués pour le joueur ayant pour idJoueur $id ",$rep);
+                    $reponse = Util::reponseOk("voici les compétences non debloqués pour le joueur ayant pour idJoueur $id ",Util::formateTabJson($rep));
                      echo(json_encode($reponse));
 
                 } else {
@@ -127,7 +127,7 @@
                 $id = $_POST["idJoueur"];
 
                 if ( $rep = Joueur::getLesCompetencesUtilise($id) ){
-                    $reponse = Util::reponseOk("voici les compétences utilisé par le joueur ayant pour idJoueur $id ",$rep);
+                    $reponse = Util::reponseOk("voici les compétences utilisé par le joueur ayant pour idJoueur $id ",Util::formateTabJson($rep));
                      echo(json_encode($reponse));
 
                 } else {

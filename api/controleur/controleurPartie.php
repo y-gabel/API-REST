@@ -21,10 +21,9 @@
 
 		public static function getAllParties(){
 
-			if ($rep = Partie::getAllParties()){
-				$reponse = Util::reponseOk("Voici toutes les partie",$rep);
+			if ($lesParties = Partie::getAllParties()){
+				$reponse = Util::reponseOk("Voici toutes les partie",Util::formateTabJson($lesParties));
                 echo(json_encode($reponse));
-
 			} else {
                 echo(json_encode(Util::reponseNonTrouver()));
 			}

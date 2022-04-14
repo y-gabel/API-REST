@@ -70,7 +70,7 @@
 		 */
 
         public static function getJoueurById($i){
-            $requetePreparee = "SELECT * FROM Joueur where idJoueur = :i_tag";
+            $requetePreparee = "SELECT * FROM JOUEUR where idJoueur = :i_tag";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array(
                 "i_tag" => $i
@@ -92,7 +92,7 @@
 		 */
 
         public static function getJoueurByMail($mail){
-            $requetePreparee = "SELECT * FROM Joueur WHERE mail = :m_tag ;";
+            $requetePreparee = "SELECT * FROM JOUEUR WHERE mail = :m_tag ;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("m_tag" => $mail);
 
@@ -123,7 +123,7 @@
 
         public static function insertJoueur($id, $mail, $pass, $dateInsc, $nom, $pre, $thune, $niv) {
             $passHash = util::hash($pass);
-            $requetePreparee = "INSERT INTO Joueur (idJoueur, mail, password, dateInscription, nom, prenom, thunasse, niveau) 
+            $requetePreparee = "INSERT INTO JOUEUR (idJoueur, mail, password, dateInscription, nom, prenom, thunasse, niveau) 
             VALUES (:id_tag, :m_tag, :pass_tag, :insc_tag, :n_tag , :p_tag, :thune_tag, :niv_tag );"; 
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array(

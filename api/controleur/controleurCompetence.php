@@ -20,7 +20,7 @@
 
 		public static function getAllCompetences(){
 		    if ($rep = Competence::getAllCompetences()) {
-		        $reponse = Util::reponseOk("Voici les compétences",$rep);
+		        $reponse = Util::reponseOk("Voici les compétences",Util::formateTabJson($rep));
 		        echo(json_encode($reponse));
 		    } else {
 		        echo(json_encode(Util::reponseNonTrouver()));

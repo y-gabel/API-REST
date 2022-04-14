@@ -1,13 +1,13 @@
 <?php 
 	class Participe {
-		private $idJoueur;
-		private $idPartie;
-		private $duree;
-		private $score;
-		private $role;
-		private $estMort;
-		private $longitude;
-		private $latitude;
+        public $idJoueur;
+        public $idPartie;
+        public $duree;
+        public $score;
+        public $role;
+        public $estMort;
+        public $longitude;
+        public $latitude;
 		
 		public function __construct($tab){
 				$this->idJoueur = $tab["idJoueur"];
