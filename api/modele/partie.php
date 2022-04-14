@@ -1,12 +1,13 @@
 <?php 
 	require_once("config/Connexion.php");
 	class Partie {
-        public $idPartie;
-        public $datePartie;
-        public $nbMaxJoueur;
-        public $tempsLimite;
-        public $enCours;
-        public $finie;
+		private $idPartie;
+		private $datePartie;
+		private $nbMaxJoueur;
+		private $tempsLimite;
+		private $enCours;
+		private $finie;
+		private $idZone;
 
 		public function __construct($tab){
 				$this->idPartie = $tab["idPartie"];
@@ -15,6 +16,7 @@
 				$this->tempsLimite = $tab["tempsLimite"];
 				$this->nbMaxJoueur = $tab["nbMaxJoueur"];
 				$this->finie = $tab["finie"];
+				$this->idZone = $tab["idZone"];
 		}
 		
 		public function getIdPartie(){
@@ -32,9 +34,14 @@
 		public function getEnCours(){
 				return $this->enCours;
 		}
-		public function getFinie(){
-			return $this->finie;
-	}
+		public function getFinie()
+        {
+            return $this->finie;
+        }
+		public function getIdZone(){
+            return $this->idZone;
+		}
+	
 	public function setIdPartie($idPartie){
 		 $this->idPartie = $idPartie;
 	}
@@ -53,9 +60,12 @@
 	public function setFinie($finie){
 		$this->finie = $finie;
 	}
+	public function setidZone($idZone){
+		$this->idZone = $idZone;
+    }
 		//rend une partie par id
 		public static function getPartieByIdPartie($i){
-			$requetePreparee = "SELECT * FROM PARTIE where idPartie = :i_tag";
+			$requetePreparee = "SELECT * FROM partie where idPartie = :i_tag";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
 				"i_tag" => $i
@@ -68,33 +78,34 @@
 		//rend un tableau de partie
 		static function getAllParties(){
 			$tab = array();
-			$requete = "SELECT * FROM PARTIE;";
+			$requete = "SELECT * FROM partie;";
 			$resultat = Connexion::pdo()->query($requete);
 			
 			$tableau = $resultat->fetchAll(PDO::FETCH_ASSOC);
-
+			
 			foreach($tableau as $key => $val){
 				$tab[] = new Partie($val);
 			}
-
+			
 			return $tab;
 		}
 		// ajoute partie
-		public static function insertPartie($idPartie,$nbMaxJoueur,$tempsLimite,$enCours,$estFinie){
-			$requetePreparee = "INSERT INTO PARTIE(idPartie,nbMaxJoueur,datePartie,tempsLimite,enCours,finie) VALUES (:id_tag,:max_tag,now(),:temps_tag,:enCours_tag,:estFinie_tag)";
+		public static function insertPartie($i,$d,$n,$t,$e,$f){
+			$requetePreparee = "INSERT INTO partie VALUES (:i_tag,:d_tag,:n_tag,:t_tag,:e_tag,:f_tag)";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
-				"id_tag" => $idPartie,
-				"max_tag" => $nbMaxJoueur,
-				"temps_tag" => $tempsLimite,
-				"enCours_tag" => $enCours,
-				"estFinie_tag" => $estFinie
+				"i_tag" => $i,
+				"d_tag" => $d,
+				"n_tag" => $n,
+				"t_tag" => $t,
+				"e_tag" => $e,
+				"f_tag" => $f
 			);
 			$req_prep->execute($valeurs);
 		}	
 		// supprr partie par id
 		public static function deletePartie($i){
-			$requetePreparee = "DELETE FROM PARTIE WHERE idPartie = :i_tag";
+			$requetePreparee = "DELETE FROM voiture WHERE idPartie = :i_tag";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
 				"i_tag" => $i
@@ -102,21 +113,21 @@
 			$req_prep->execute($valeurs);
 		}
 		//mettre a jour une partie nb
-		public static function updatePartie($idPartie,$nbMaxJoueur,$tempsLimite,$enCours,$estFinie){	// ,$nbMaxJoueur,$tempsLimite,$enCours,$estFinie
-			$requetePreparee = "UPDATE PARTIE SET nbMaxJoueur = :nbMaxJoueur_tag,tempsLimite = :tempsLimite_tag,enCours = :enCours_tag,finie = :estFinie_tag, where idPartie = :idPartie_tag";
+		public static function updatePartie($i,$d,$n,$t,$e,$f){	
+			$requetePreparee = "UPDATE partie SET datePartie = :d_tag,nbMaxJoueur = :n_tag,tempsLimite = :t_tag,enCours = :e_tag,datePartie = :d_tag,finie = :f_tag, where idPartie = :i_tag";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
-				"idPartie_tag" => $idPartie,
-				"nbMaxJoueur_tag" => $nbMaxJoueur,
-				"tempsLimite_tag" => $tempsLimite,
-				"enCours_tag" => $enCours,
-				"estFinie_tag" => $estFinie
+				"d_tag" => $d,
+				"n_tag" => $n,
+				"t_tag" => $t,
+				"e_tag" => $e,
+				"f_tag" => $f
 			);
 			$req_prep->execute($valeurs);	
 		}
 
 		public static function getLesJoueurs($idPartie){
-            $requetePreparee = "SELECT * FROM JOUEUR WHERE idJoueur in (select idJoueur from PARTICIPE WHERE idPartie = :i_tag);";
+            $requetePreparee = "SELECT * FROM Joueur WHERE idJoueur in (select idJoueur from Participe WHERE idPartie = :i_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("i_tag" => $idPartie);
             $req_prep->execute($valeurs);
@@ -134,7 +145,7 @@
 		}
 
 		public static function getDonneesPartieJoueur($idPartie,$idJoueur){
-            $requetePreparee = "SELECT * FROM PARTCIPE WHERE idJoueur = :ij_tag and idPartie = :ip_tag;";
+            $requetePreparee = "SELECT * FROM Participe WHERE idJoueur = :ij_tag and idPartie = :ip_tag;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array(
             	"ij_tag" => $idJoueur,

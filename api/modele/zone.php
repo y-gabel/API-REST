@@ -1,39 +1,39 @@
 <?php 
 	class Zone {
-        public $idZone;
-        public $latitude;
-        public $longitude;
-        public $rayon;
-        public $margeRayon;
-        public $nom;
+		private $idZone;
+		private $latitudeZone;
+		private $longitudeZone;
+		private $rayonZone;
+		private $margeRayonZone;
+		private $nomZone;
 		
 		public function __construct($tab){
 				$this->idZone = $tab["idZone"];
-				$this->latitude = $tab["latitude"];
-				$this->longitude = $tab["longitude"];
-				$this->rayon = $tab["rayon"];
-				$this->margeRayon = $tab["margeRayon"];
-				$this->nom = $tab["nom"];
+				$this->latitudeZone = $tab["latitudeZone"];
+				$this->longitudeZone = $tab["longitudeZone"];
+				$this->margeRayonZone = $tab["rayonZone"];
+				$this->margeRayonZone = $tab["margeRayonZone"];
+				$this->nomZone = $tab["nomZone"];
 		}
 		
 		public function getIdZone(){		return $this->idZone; 		}
-		public function getLatitude(){		return $this->latitude; 	}
-		public function getLongitude(){		return $this->longitude; 	}
-		public function getRayon(){			return $this->rayon; 		}
-		public function getMargeRayon(){	return $this->margeRayon; 	}
-		public function getNom(){			return $this->nom; 			}
+		public function getLatitudeZone(){		return $this->latitudeZone; 	}
+		public function getLongitudeZone(){		return $this->longitudeZone; 	}
+		public function getRayonZone(){			return $this->rayonZone; 		}
+		public function getMargeRayonZone(){	return $this->margeRayonZone; 	}
+		public function getNomZone(){			return $this->nomZone; 			}
 		
 		public function setIdZone($idZone){		 $this->idZone = $idZone; 		}
-		public function setLatitude($latitude){	 $this->latitude = $latitude;		}
-		public function setLongitude($longitude){ $this->longitude = $longitude; 	}
-		public function setRayon($rayon){		 $this->rayon = $rayon; 			}
-		public function setMargeRayon($margeRayon){	 $this->margeRayon = $margeRayon; }
-		public function setNom($nom){			 $this->nom = $nom; 				}
+		public function setLatitudeZone($latitudeZone){	 $this->latitudeZone = $latitudeZone;		}
+		public function setLongitudeZone($longitudeZone){ $this->longitudeZone = $longitudeZone; 	}
+		public function setRayonZone($rayonZone){		 $this->rayonZone = $rayonZone; 			}
+		public function setMargeRayonZone($margeRayonZone){	 $this->margeRayonZone = $margeRayonZone; }
+		public function setNomZone($nomZone){			 $this->nomZone = $nomZone; 				}
 
 
 		
 		static function getZoneById($id){
-			$requetePreparee = "SELECT * FROM ZONE WHERE idZone = :i_tag";
+			$requetePreparee = "SELECT * FROM zone WHERE idZone = :i_tag";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
 				"i_tag" => $id
@@ -49,8 +49,8 @@
 		}
 		
 		static function getNearestZones($latitude,$longitude){
-			$requetePreparee = "SELECT latitude, longitude, SQRT(POW(69.1 * (latitude - :la_tag), 2) + POW(69.1 * (:lo_tag - longitude) * COS(latitude / 57.3), 2)) AS distance
-								FROM ZONE ORDER BY distance";
+			$requetePreparee = "SELECT latitudeZone, longitudeZone, SQRT(POW(69.1 * (latitudeZone - :la_tag), 2) + POW(69.1 * (:lo_tag - longitudeZone) * COS(latitudeZone / 57.3), 2)) AS distance
+								FROM Zone ORDER BY distance";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
 				"la_tag" => $latitude,
