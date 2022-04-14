@@ -4,37 +4,35 @@
 	class controleurSousZone {
 
 		public static function getSousZoneById(){
+            if (!Util::verifPostArgs("id")){
+                echo(json_encode(Util::reponseMauvaiseRqt()));
+                return;
+            }
+            $id = $_POST["id"];
 
-			if (isset($_POST["id"])){
-				$id = $_POST["id"];
+			if ($rep = SousZone::getSousZoneById($id)) {
+				$reponse = Util::reponseOk('Voici la sous-zone correspondante à l id : $id',$rep);
+				echo(json_encode($reponse));
 			} else {
-				return echo(json_encode(reponseMauvaiseRqt());
-			}
-			
-			if ($rep = getSousZoneById($id)) {
-				$reponse = reponseOk('Voici la sous-zone correspondante à l id : $id',$rep);
-				return echo(json_encode($reponse)));
-			} else {
-				return echo(json_encode(reponseNonTrouver());
+				echo(json_encode(Util::reponseNonTrouver()));
 			}
 			
 		}
 		
 		public static function getNearestSousZonesByZoneID(){
+            if (!Util::verifPostArgs("idZone","latitude","longitude")){
+                echo(json_encode(Util::reponseMauvaiseRqt()));
+                return;
+            }
+            $latitude = $_POST["latitude"];
+            $longitude = $_POST["longitude"];
+            $idZone = $_POST["idZone"];
 
-			if (isset($_POST["idZone"]) && isset($_POST["latitude"]) && isset($_POST["longitude"])){
-				$latitude = $_POST["latitude"];
-				$longitude = $_POST["longitude"];
-				$idZone = $_POST["idZone"];
-			}else {
-				return echo(json_encode(reponseMauvaiseRqt());
-			}
-			
-			if ($rep = getNearestSousZonesByZoneID($idZone,$latitude,$longitude)) {
-				$reponse = reponseOk("Voici toutes les sous-zones proches de la position actuelle",$rep);
-				return echo(json_encode($reponse)));
+			if ($rep = SousZone::getNearestSousZonesByZoneID($idZone,$latitude,$longitude)) {
+				$reponse = Util::reponseOk("Voici toutes les sous-zones proches de la position actuelle",$rep);
+				echo(json_encode($reponse));
 			} else {
-				return echo(json_encode(reponseNonTrouver());
+				echo(json_encode(Util::reponseNonTrouver()));
 			}
 		}
 		

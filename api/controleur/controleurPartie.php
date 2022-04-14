@@ -20,14 +20,6 @@
         }
 
 		public static function getAllParties(){
-			
-			if (isset($_POST["idZone"]) && isset($_POST["latitude"]) && isset($_POST["longitude"])){
-				$latitude = $_POST["latitude"];
-				$longitude = $_POST["longitude"];
-				$idZone = $_POST["idZone"];
-			} else {
-                echo(json_encode(Util::reponseMauvaiseRqt()));
-			}
 
 			if ($rep = Partie::getAllParties()){
 				$reponse = Util::reponseOk("Voici toutes les partie",$rep);
@@ -36,65 +28,56 @@
 			} else {
                 echo(json_encode(Util::reponseNonTrouver()));
 			}
+
 		}
 
 		public static function insertPartie(){
 
-			if (isset($_POST["idPartie"]) && isset($_POST["datePartie"]) && isset($_POST["nbMaxJoueur"]) && isset($_POST["enCours"]) &&  isset($_POST["finie"]) ){
-				$i = $_POST["idPartie"];
-				$d = $_POST["datePartie"];
-				$n = $_POST["nbMaxJoueur"];
-				$e = $_POST["enCours"];
-				$f = $_POST["finie"];
-			} else {
-                echo(json_encode(Util::reponseMauvaiseRqt());
-			}
+            if (!Util::verifPostArgs("idPartie", "nbMaxJoueur", "tempsLimite")){
+                echo(json_encode(Util::reponseMauvaiseRqt()));
+                return;
+            }
 
-			if ( $rep = insertPartie($i,$d,$n,$t,$e,$f) ){
-				$reponse = Util::reponseOk("partie insérée",$rep);
-                echo(json_encode($reponse));
+            $idPartie = $_POST["idPartie"];
+            $nbMaxJoueur = $_POST["nbMaxJoueur"];
+            $tempsLimite = $_POST["tempsLimite"];
 
-			} else {
-                echo(json_encode(reponseMauvaiseRqt()));
-			}
-
+			Partie::insertPartie($idPartie,$nbMaxJoueur,$tempsLimite,1,0);
+            $reponse = Util::reponseOk("partie insérée");
+            echo(json_encode($reponse));
 		}
 
 		public static function deletePartie(){
+            if (!Util::verifPostArgs("idPartie")){
+                echo(json_encode(Util::reponseMauvaiseRqt()));
+                return;
+            }
 
-			if (isset($_POST["idPartie"])){
-				$i = $_POST["idPartie"];
-			} else {
-                echo(json_encode(reponseMauvaiseRqt()));
-			}
+            $idPartie = $_POST["idPartie"];
+			Partie::deletePartie($idPartie);
+            $reponse = Util::reponseOk("partie deleted");
+            echo(json_encode($reponse));
 
-			if ($rep = deletePartie($i)){
-				$reponse = reponseOk("partie deleted",$rep);
-                echo(json_encode($reponse));
-
-			} else {
-                echo(json_encode(reponseMauvaiseRqt()));
-			}
 		}
 
 		public static function updatePartie(){
 
-			if (isset($_POST["idPartie"]) && isset($_POST["datePartie"]) && isset($_POST["nbMaxJoueur"]) && isset($_POST["enCours"]) &&  isset($_POST["finie"]) ){
-				$i = $_POST["idPartie"];
-				$d = $_POST["datePartie"];
-				$n = $_POST["nbMaxJoueur"];
-				$e = $_POST["enCours"];
-				$f = $_POST["finie"];
-			} else {
-                echo(json_encode(reponseMauvaiseRqt()));
-			}
+            if (!Util::verifPostArgs("idPartie", "nbMaxJoueur", "tempsLimite", "enCours", "estFinie")){
+                echo(json_encode(Util::reponseMauvaiseRqt()));
+                return;
+            }
 
-			if ( $rep = updatePartie($i,$d,$n,$t,$e,$f) ){
-				$reponse = reponseOk("partie updated",$rep);
-                echo(json_encode($reponse));
 
-			} else {
-                echo(json_encode(reponseMauvaiseRqt()));
+            $idPartie = $_POST["idPartie"];
+            $nbMaxJoueur = $_POST["nbMaxJoueur"];
+            $tempsLimite = $_POST["tempsLimite"];
+            $enCours = $_POST["enCours"];
+            $estFinie = $_POST["estFinie"];
+
+            Partie::insertPartie($idPartie,$nbMaxJoueur,$tempsLimite,$enCours,$estFinie);
+            $reponse = Util::reponseOk("Partie mise à jour");
+            echo(json_encode($reponse));
+
 		}
 	}
 ?>

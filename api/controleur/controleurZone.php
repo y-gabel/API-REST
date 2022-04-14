@@ -4,35 +4,33 @@
 	class controleurZone {
 
 		public static function getNearestZones(){
+            if (!Util::verifPostArgs("latitude","longitude" )){
+                echo(json_encode(Util::reponseMauvaiseRqt()));
+                return;
+            }
+            $latitude = $_POST["latitude"];
+            $longitude = $_POST["longitude"];
 
-			if (isset($_POST["latitude"]) && isset($_POST["longitude"])){
-				$latitude = $_POST["latitude"];
-				$longitude = $_POST["longitude"];
+			if ($rep = Zone::getNearestZones($latitude,$longitude)) {
+			    $reponse = Util::reponseOk("Voici toutes les zones proches de la position actuelle",$rep);
+			    echo(json_encode($reponse));
 			} else {
-				return reponseMauvaiseRqt()
-			}
-
-			if ($rep = getNearestZones($latitude,$longitude)) {
-				$reponse = reponseOk("Voici toutes les zones proches de la position actuelle",$rep);
-				return echo(json_encode($reponse)));
-			} else {
-				return echo(json_encode(reponseNonTrouver());
+			    echo(json_encode(Util::reponseNonTrouver()));
 			}
 		}
 
 		public static function getZoneById(){
+            if (!Util::verifPostArgs("id")){
+                echo(json_encode(Util::reponseMauvaiseRqt()));
+                return;
+            }
+            $id = $_POST["id"];
 
-			if (isset($_POST["id"])){
-				$id = $_POST["id"];
-
+			if ($rep = Zone::getZoneById($id)) {
+				$reponse =Util::reponseOk('Voici la zone correspondante à l id : $id',$rep);
+				echo(json_encode($reponse));
 			} else {
-				return reponseMauvaiseRqt()
-			}
-			if ($rep = getZoneById($id)) {
-				$reponse = reponseOk('Voici la zone correspondante à l id : $id',$rep);
-				return echo(json_encode($reponse)));
-			} else {
-				return echo(json_encode(reponseNonTrouver());
+				echo(json_encode(Util::reponseNonTrouver()));
 			}
 		}
 		

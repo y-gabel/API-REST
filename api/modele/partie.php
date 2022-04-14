@@ -80,16 +80,15 @@
 			return $tab;
 		}
 		// ajoute partie
-		public static function insertPartie($i,$d,$n,$t,$e,$f){
-			$requetePreparee = "INSERT INTO partie VALUES (:i_tag,:d_tag,:n_tag,:t_tag,:e_tag,:f_tag)";
+		public static function insertPartie($idPartie,$nbMaxJoueur,$tempsLimite,$enCours,$estFinie){
+			$requetePreparee = "INSERT INTO partie(idPartie,nbMaxJoueur,datePartie,tempsLimite,enCours,finie) VALUES (:id_tag,:max_tag,now(),:temps_tag,:enCours_tag,:estFinie_tag)";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
-				"i_tag" => $i,
-				"d_tag" => $d,
-				"n_tag" => $n,
-				"t_tag" => $t,
-				"e_tag" => $e,
-				"f_tag" => $f
+				"id_tag" => $idPartie,
+				"max_tag" => $nbMaxJoueur,
+				"temps_tag" => $tempsLimite,
+				"enCours_tag" => $enCours,
+				"estFinie_tag" => $estFinie
 			);
 			$req_prep->execute($valeurs);
 		}	
@@ -103,15 +102,15 @@
 			$req_prep->execute($valeurs);
 		}
 		//mettre a jour une partie nb
-		public static function updatePartie($i,$d,$n,$t,$e,$f){	
-			$requetePreparee = "UPDATE partie SET datePartie = :d_tag,nbMaxJoueur = :n_tag,tempsLimite = :t_tag,enCours = :e_tag,datePartie = :d_tag,finie = :f_tag, where idPartie = :i_tag";
+		public static function updatePartie($idPartie,$nbMaxJoueur,$tempsLimite,$enCours,$estFinie){	// ,$nbMaxJoueur,$tempsLimite,$enCours,$estFinie
+			$requetePreparee = "UPDATE partie SET nbMaxJoueur = :nbMaxJoueur_tag,tempsLimite = :tempsLimite_tag,enCours = :enCours_tag,finie = :estFinie_tag, where idPartie = :idPartie_tag";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
-				"d_tag" => $d,
-				"n_tag" => $n,
-				"t_tag" => $t,
-				"e_tag" => $e,
-				"f_tag" => $f
+				"idPartie_tag" => $idPartie,
+				"nbMaxJoueur_tag" => $nbMaxJoueur,
+				"tempsLimite_tag" => $tempsLimite,
+				"enCours_tag" => $enCours,
+				"estFinie_tag" => $estFinie
 			);
 			$req_prep->execute($valeurs);	
 		}
