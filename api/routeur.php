@@ -14,7 +14,7 @@
 
 	$controleur = $_GET['controleur'];
 	$action = $_GET['action'];
-	
+	echo("m");
 	switch ($controleur){
 		case "controleurJoueur":
 			require_once("controleur/controleurJoueur.php");
@@ -22,7 +22,9 @@
 
 			break;
 		case "controleurPartie":
+            echo("2");
 			require_once("controleur/controleurPartie.php");
+            echo("3");
 			ControleurPartie::$action();
 
 			break;

@@ -4,12 +4,12 @@
 	class controleurPartie {
 
 		public static function getPartieByIdPartie(){
-
+            echo("3");
             if (!Util::verifGetArgs("idPartie")){
                 echo(json_encode(Util::reponseMauvaiseRqt()));
                 return;
             }
-
+            echo("mmm");
             $idPartie = $_GET["idPartie"];
             if ($rep = Partie::getPartieByIdPartie($idPartie)) {
                 $reponse = Util::reponseOk("Voici la partie qui a pour id $idPartie ",$rep);

@@ -1,5 +1,7 @@
 <?php 
 	require_once("config/Connexion.php");
+    require_once("modele/joueur.php");
+
 	class Partie {
 		public $idPartie;
         public $datePartie;
@@ -103,7 +105,7 @@
 		 */
 		// ajoute partie
 		public static function insertPartie($idPartie,$enCours,$datePartie,$estFinie,$nbMaxJoueur,$tempsLimite){
-			$requetePreparee = "INSERT INTO PARTIE VALUES(idPartie, enCours, datePartie, finie, nbMaxJoueur, tempsLimite) (:id_tag,:enCours_tag,:datePartie_tag,:finie_tag,:nbMaxJoueur_tag,:tempsLimite_tag)";
+			$requetePreparee = "INSERT INTO PARTIE(idPartie, enCours, datePartie, finie, nbMaxJoueur, tempsLimite) VALUES(:id_tag,:enCours_tag,:datePartie_tag,:finie_tag,:nbMaxJoueur_tag,:tempsLimite_tag);";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
 				"id_tag" => $idPartie,
@@ -117,7 +119,7 @@
 		}
 		// supprr partie par id
 		public static function deletePartie($idPartie){
-			$requetePreparee = "DELETE FROM PARTIE WHERE idPartie = :id_tag";
+			$requetePreparee = "DELETE FROM PARTIE WHERE idPartie = :id_tag;";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
 				"id_tag" => $idPartie
@@ -140,9 +142,9 @@
 		}
 
 		public static function getLesJoueurs($idPartie){
-            $requetePreparee = "SELECT * FROM Joueur WHERE idJoueur in (select idJoueur from Participe WHERE idPartie = :i_tag);";
+            $requetePreparee = "SELECT * FROM JOUEUR WHERE idJoueur in (select idJoueur from PARTICIPE WHERE idPartie = :id_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("i_tag" => $idPartie);
+            $valeurs = array("id_tag" => $idPartie);
             $req_prep->execute($valeurs);
             $resultat = $req_prep->fetchAll(PDO::FETCH_ASSOC);
 
@@ -151,18 +153,19 @@
             } else {
                 $tab = array();
                 foreach($resultat as $key => $val){
-                    $tab[] = new Partie($val);
+                    var_dump($val);
+                    $tab[] = new Joueur($val);
                 }
                 return $tab;
             }
 		}
 
 		public static function getDonneesPartieJoueur($idPartie,$idJoueur){
-            $requetePreparee = "SELECT * FROM Participe WHERE idJoueur = :ij_tag and idPartie = :ip_tag;";
+            $requetePreparee = "SELECT * FROM PARTICIPE WHERE idJoueur = :idJoueur_tag and idPartie = :idPartie_tag;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array(
-            	"ij_tag" => $idJoueur,
-            	"ip_tag" => $idPartie
+            	"idPartie_tag" => $idPartie,
+                "idJoueur_tag" => $idJoueur
             );
             $req_prep->execute($valeurs);
             $resultat = $req_prep->fetch(PDO::FETCH_ASSOC);

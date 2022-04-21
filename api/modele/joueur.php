@@ -3,16 +3,14 @@
 
  		/*------------------------------------------------------------------------------------------------------------------------------
 		/////////////////                                         ATTRIBUTS                                            ///////////////// 
-		------------------------------------------------------------------------------------------------------------------------------*/       
+		------------------------------------------------------------------------------------------------------------------------------*/
 
 		public $idJoueur;
-        public $mdp;
-        public $dateInscription;
-        public $nom;
-        public $prenom;
         public $mail;
+        public $password;
+        public $dateInscription;
+        public $pseudo;
         public $solde;
-        public $niveau;
 
         /*------------------------------------------------------------------------------------------------------------------------------
 		/////////////////                                         GETTERS                                              ///////////////// 
@@ -157,7 +155,7 @@
         public static function updateJoueur($idJoueur, $mail, $password, $dateInscription, $pseudo, $solde){
             //$mdpHash = util::hash(mdp);
             $requetePreparee = "UPDATE JOUEUR SET mail = :mail_tag, password = :pass_tag, dateInscription = :dateInsc_tag, pseudo = :pseudo_tag, solde = :solde_tag
-            WHERE idJoueur = :id_tag";
+            WHERE idJoueur = :id_tag;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array(
                 "id_tag" => $idJoueur,
