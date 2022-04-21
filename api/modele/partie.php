@@ -153,7 +153,6 @@
             } else {
                 $tab = array();
                 foreach($resultat as $key => $val){
-                    var_dump($val);
                     $tab[] = new Joueur($val);
                 }
                 return $tab;
