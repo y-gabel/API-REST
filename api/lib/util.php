@@ -93,34 +93,44 @@ class Util {
      */
 
     public static function reponseOk($message,$data = NULL){
+        http_response_code(200);
         return Util::formateReponse(200,$message,$data);
     }
     public static function reponseCreer($message,$data = NULL){
+        http_response_code(201);
         return Util::formateReponse(201,$message,$data);
     }
     public static function reponseAucunContenu(){
+        http_response_code(204);
         return Util::formateReponse(204,"Ok");
     }
     public static function reponseMauvaiseRqt(){
+        http_response_code(400);
         return Util::formateReponse(400,"Erreur Mauvaise Requête");
     }
     public static function reponseNonAutorise(){
+        http_response_code(401);
         return Util::formateReponse(401,"Erreur Autorisation Impossible/Manquante");
     }
     public static function reponseInterdit(){
+        http_response_code(403);
         return Util::formateReponse(403,"Erreur Accès Interdit");
     }
     public static function reponseNonTrouver(){
+        http_response_code(404);
         return Util::formateReponse(404,"Erreur Ressource Introuvable");
     }
     public static function reponseNonValide(){
+        http_response_code(405);
         return Util::formateReponse(405,"Erreur Méthode HTTP Non Valide");
     }
     public static function reponseConflit($message){
+        http_response_code(409);
         return Util::formateReponse(409,$message);
     }
-    public static function reponseErrServ(){
-        return Util::formateReponse(500,"Erreur Serveur Interne");
+    public static function reponseErrServ($err = ""){
+        http_response_code(500);
+        return Util::formateReponse(500,"Erreur Serveur Interne : ".$err);
     }
 }
 ?>

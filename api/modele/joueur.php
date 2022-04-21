@@ -288,9 +288,9 @@
 
         public static function getLesCompetencesDebloques($idJoueur)
         {
-            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :i_tag);";
+            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :id_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("i_tag" => $idJoueur);
+            $valeurs = array("id_tag" => $idJoueur);
 
             $req_prep->execute($valeurs);
             $resultat = $req_prep->fetchAll(PDO::FETCH_ASSOC);
@@ -307,9 +307,9 @@
         }
         public static function getLesCompetencesNonDebloques($idJoueur)
         {
-            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence not in (select idCompetence from ADebloque WHERE idJoueur = :i_tag);";
+            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence not in (select idCompetence from ADebloque WHERE idJoueur = :id_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("i_tag" => $idJoueur);
+            $valeurs = array("id_tag" => $idJoueur);
 
             $req_prep->execute($valeurs);
             $resultat = $req_prep->fetchAll(PDO::FETCH_ASSOC);
@@ -324,11 +324,11 @@
                 return $tab;
             }
         }
-        public static function getLesCompetencesUtilise($idJoueur)
+        /*public static function getLesCompetencesUtilise($idJoueur)
         {
-            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :i_tag and utilise = 1);";
+            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :id_tag and utilise = 1);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("i_tag" => $idJoueur);
+            $valeurs = array("id_tag" => $idJoueur);
 
             $req_prep->execute($valeurs);
             $resultat = $req_prep->fetch(PDO::FETCH_ASSOC);
@@ -338,5 +338,5 @@
             } else {
                 new Competence($resultat);
             }
-        }
+        }*/
 }

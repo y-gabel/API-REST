@@ -11,14 +11,16 @@
 
 		public function __construct($tab){
 				$this->idPartie = $tab["idPartie"];
+                $this->enCours = $tab["enCours"];
 				$this->datePartie = $tab["datePartie"];
-				$this->enCours = $tab["enCours"];
+                $this->finie = $tab["finie"];
+                $this->nbMaxJoueur = $tab["nbMaxJoueur"];
 				$this->tempsLimite = $tab["tempsLimite"];
-				$this->nbMaxJoueur = $tab["nbMaxJoueur"];
-				$this->finie = $tab["finie"];
+
+
 				$this->idZone = $tab["idZone"];
 		}
-		
+
 		public function getIdPartie(){
 				return $this->idPartie;
 		}
