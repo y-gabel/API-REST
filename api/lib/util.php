@@ -87,7 +87,7 @@ class Util {
      * @param message message à transmettre correspondant à ce que signifie le code erreur
      * @param data [facultatif] données facultatifs à inserer.
      *
-     * @author Vaudour Théophile <theophile.vodour@universite-paris-saclay.fr>
+     * @author Vaudour Théophile <theophile.vaudour@universite-paris-saclay.fr>
      * @return array contenant toutes les informations passé en paramètre
      *
      */
