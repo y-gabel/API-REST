@@ -7,7 +7,7 @@
         public $estMort;
         public $longitudeJoueur;
         public $latitudeJoueur;
-		
+		/*voila */
 		public function __construct($tab){
 				$this->idJoueur = $tab["idJoueur"];
 				$this->idPartie = $tab["idPartie"];
