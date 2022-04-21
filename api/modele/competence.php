@@ -45,7 +45,7 @@
 		}
 		public static function getAllCompetences(){
 			$tab = array();
-			$requete = "SELECT * FROM Competence;";
+			$requete = "SELECT * FROM COMPETENCE;";
 			$resultat = Connexion::pdo()->query($requete);
 			
 			$tableau = $resultat->fetchAll(PDO::FETCH_ASSOC);
