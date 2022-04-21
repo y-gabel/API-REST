@@ -4,15 +4,13 @@
         public $nom;
         public $description;
         public $cooldown;
-        public $scoreMinimal;
         public $prix;
 		
 		public function __construct($tab){
-				$this->idCompetence = $tab["idSousZone"];
+				$this->idCompetence = $tab["idCompetence"];
 				$this->nom = $tab["nom"];
 				$this->description = $tab["description"];
 				$this->cooldown = $tab["cooldown"];
-				$this->scoreMinimal = $tab["scoreMinimal"];
 				$this->prix = $tab["prix"];
 		}
 		
@@ -20,15 +18,13 @@
 		public function getNom(){		return $this->nom; 	}
 		public function getDescription(){		return $this->description; 	}
 		public function getCooldown(){ return $this->cooldown; }
-		public function getScoreMinimal(){ return $this->scoreMinimal; }
 		public function getPrix(){ return $this->prix; }
 		
 		public function setIdCompetence($idCompetence){ $this->idCompetence = $idCompetence;}
 		public function setNom($nom){ $this->nom = $nom;}
 		public function setDescription($description){ $this->description = $description;}
 		public function setCooldown($cooldown){ $this->cooldown = $cooldown;}
-		public function setScoreMinimal($scoreMinimal){ $this->scoreMinimal = $scoreMinimal;}
-		public function setPrix($prix){ $this->prix = $prix;}
+	    public function setPrix($prix){ $this->prix = $prix;}
 
 
 		

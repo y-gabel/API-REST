@@ -19,26 +19,22 @@
 		------------------------------------------------------------------------------------------------------------------------------*/
 
         public function getIdJoueur(){ return $this->idJoueur; }
-        public function getMdp(){ return $this->mdp; }
-        public function getDateInscription(){ return $this->dateInscription; }
-        public function getNom(){ return $this->nom; }
-        public function getPrenom(){ return $this->prenom; }
         public function getMail(){ return $this->mail; }
+        public function getPassword(){ return $this->password; }
+        public function getDateInscription(){ return $this->dateInscription; }
+        public function getPseudo(){ return $this->pseudo; }
         public function getSolde(){ return $this->solde; }
-        public function getNiveau(){ return $this->niveau; }
 
         /*------------------------------------------------------------------------------------------------------------------------------
 		/////////////////                                         SETTERS                                              ///////////////// 
 		------------------------------------------------------------------------------------------------------------------------------*/
 
         public function setIdJoueur($idJoueur){ $this->idJoueur = $idJoueur;}
-        public function setMdp($mdp){ $this->mdp = $mdp;}
-        public function setDateInscription($dateInscription){ $this->dateInscription = $dateInscription;}
-        public function setNom($nom){ $this->nom = $nom;}
-        public function setPrenom($prenom){ $this->prenom = $prenom;}
         public function setMail($mail){ $this->mail = $mail;}
+        public function setPassword($password){ $this->password = $password;}
+        public function setDateInscription($dateInscription){ $this->dateInscription = $dateInscription;}
+        public function setPseudo($pseudo){ $this->pseudo = $pseudo;}
         public function setSolde($solde){ $this->solde = $solde;}
-        public function setNiveau($niveau){ $this->niveau = $niveau;}
 
         /*------------------------------------------------------------------------------------------------------------------------------
 		/////////////////                                         CONSTRUCTORS                                         ///////////////// 
@@ -46,13 +42,11 @@
 
         public function __construct($tab){
             $this->idJoueur = $tab["idJoueur"];
-            $this->password = $tab["mdp"];
-            $this->dateInscription = $tab["dateInscription"];
-            $this->nom = $tab["nom"];
-            $this->prenom = $tab["prenom"];
             $this->mail = $tab["mail"];
-            $this->thunasse = $tab["solde"];
-            $this->niveau = $tab["niveau"];
+            $this->password = $tab["password"];
+            $this->dateInscription = $tab["dateInscription"];
+            $this->pseudo = $tab["pseudo"];
+            $this->solde = $tab["solde"];
         }
 
         /*------------------------------------------------------------------------------------------------------------------------------
@@ -78,8 +72,8 @@
             $req_prep->execute($valeurs);
             if ($req_prep->rowCount() == 0) { return false;}
 
-            $resultat = $req_prep->fetch(PDO::FETCH_ASSOC);
-            return new Joueur($resultat);
+            $tabJoueur = $req_prep->fetch(PDO::FETCH_ASSOC);
+            return new Joueur($tabJoueur);
         }
         /**
 		 * Retourne le joueur ayant pour mail, le mail passé en paramètre
@@ -99,9 +93,8 @@
             $req_prep->execute($valeurs);
             if ($req_prep->rowCount() == 0) { return false;}
 
-            $req_prep->setFetchMode(PDO::FETCH_CLASS,"Joueur");
-		    $tabJoueur = $req_prep->fetchAll();
-		    return $tabJoueur;
+            $tabJoueur = $req_prep->fetch(PDO::FETCH_ASSOC);
+		    return  new Joueur($tabJoueur);
         }
 
         /**
@@ -121,20 +114,18 @@
 		 * 					
 		 */
 
-        public static function insertJoueur($id, $mdp, $dateInsc, $nom, $prenom, $mail, $solde, $niveau) {
-            $passHash = util::hash($mdp);
-            $requetePreparee = "INSERT INTO JOUEUR (idJoueur, mdp, dateInscription, nom, prenom, mail, solde, niveau) 
-            VALUES (:id_tag, :mdp_tag, :dateInsc_tag, :nom_tag , :prenom_tag, :mail_tag, :solde_tag, :niveau_tag );";
+        public static function insertJoueur($idJoueur, $mail, $password, $dateInscription, $pseudo, $solde) {
+
+            $requetePreparee = "INSERT INTO JOUEUR (idJoueur, mail, password, dateInscription, pseudo, solde) 
+            VALUES (:id_tag, :mail_tag, :pass_tag, :dateInsc_tag, :pseudo_tag, :solde_tag );";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array(
-                "id_tag" => $id,
-                "mdp_tag" => $mdp,
-                "dateInsc_tag" => $dateInsc,
-                "nom_tag" => $nom,
-                "prenom_tag" => $prenom,
+                "id_tag" => $idJoueur,
                 "mail_tag" => $mail,
-                "solde_tag" => $solde,
-                "niveau_tag" => $niveau
+                "pass_tag" => $password,
+                "dateInsc_tag" => $dateInscription,
+                "pseudo_tag" => $pseudo,
+                "solde_tag" => $solde
             );
 
             try {
@@ -163,19 +154,18 @@
 		 * 					
 		 */
 
-        public static function updateJoueur($id, $mdp, $nom, $prenom, $mail, $solde, $niveau){
-            $mdpHash = util::hash(mdp);
-            $requetePreparee = "UPDATE JOUEUR SET mdp = :mdp_tag, nom = :nom_tag , prenom = :prenom_tag, mail = :mail_tag, solde = :solde_tag, niveau = :niveau_tag 
+        public static function updateJoueur($idJoueur, $mail, $password, $dateInscription, $pseudo, $solde){
+            //$mdpHash = util::hash(mdp);
+            $requetePreparee = "UPDATE JOUEUR SET mail = :mail_tag, password = :pass_tag, dateInscription = :dateInsc_tag, pseudo = :pseudo_tag, solde = :solde_tag
             WHERE idJoueur = :id_tag";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array(
-                "id_tag" => $id,
-                "mdp_tag" => $mdpHash,
-                "nom_tag" => $nom,
-                "prenom_tag" => $prenom,
+                "id_tag" => $idJoueur,
                 "mail_tag" => $mail,
-                "solde_tag" => $solde,
-                "niveau_tag" => $niveau
+                "pass_tag" => $password,
+                "dateInsc_tag" => $dateInscription,
+                "pseudo_tag" => $pseudo,
+                "solde_tag" => $solde
             );
 
             try {
@@ -249,10 +239,10 @@
 		 * 					
 		 */
 
-        public static function checkMDP($id,$mdp) {
-            $requetePreparee = "SELECT * FROM JOUEUR WHERE idJoueur = :id_tag and mdp = :mdp_tag;";
+        public static function checkMDP($idJoueur,$password) {
+            $requetePreparee = "SELECT * FROM JOUEUR WHERE idJoueur = :id_tag and password = :pass_tag;";
             $req_prep = connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("id_tag" => $id, "mdp_tag" => util::hash($mdp));
+            $valeurs = array("id_tag" => $idJoueur, "pass_tag" => $password);
             $req_prep->execute($valeurs);
             $req_prep->setFetchMode(PDO::FETCH_CLASS,"utilisateur");
             $tabUtilisateurs = $req_prep->fetchAll();

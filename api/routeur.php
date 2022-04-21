@@ -31,11 +31,6 @@
 			ControleurZone::$action();
 
 			break;
-		case "controleurSousZone":
-			require_once("controleur/controleurSousZone.php");
-			ControleurSousZone::$action();
-
-			break;
 		case "controleurCompetence":
 			require_once("controleur/controleurCompetence.php");
 			ControleurCompetence::$action();

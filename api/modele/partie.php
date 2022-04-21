@@ -41,7 +41,7 @@
 		public function getIdZone(){
             return $this->idZone;
 		}
-	
+
 	public function setIdPartie($idPartie){
 		 $this->idPartie = $idPartie;
 	}
