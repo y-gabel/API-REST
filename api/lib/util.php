@@ -12,10 +12,9 @@ class Util {
      *
      */
 
-    public static function verifPostArgs(...$args){
-
+    public static function verifGetArgs(...$args){
         foreach ($args as $argu){
-            if (!isset($_POST[$argu])){
+            if (!isset($_GET[$argu])){
                 return false;
             }
         }

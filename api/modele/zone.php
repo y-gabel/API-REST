@@ -1,11 +1,11 @@
 <?php 
 	class Zone {
-		private $idZone;
-		private $latitudeZone;
-		private $longitudeZone;
-		private $rayonZone;
-		private $margeRayonZone;
-		private $nomZone;
+        public $idZone;
+        public $latitudeZone;
+        public $longitudeZone;
+        public $rayonZone;
+        public $margeRayonZone;
+        public $nomZone;
 		
 		public function __construct($tab){
 				$this->idZone = $tab["idZone"];

@@ -2,17 +2,18 @@
 
 	require_once("config/Connexion.php");
 	
-	if ($_SERVER['REQUEST_METHOD'] != 'POST'){
+	if ($_SERVER['REQUEST_METHOD'] != 'GET'){
 		echo(json_encode(Util::reponseNonAutorise()));
 		return;
 	}
-	if (!Util::verifPostArgs("controleur","action")){
+
+	if (!Util::verifGetArgs("controleur","action")){
 		echo(json_encode(Util::reponseMauvaiseRqt()));
 		return;
 	}
-	
-	$controleur = $_POST['controleur'];
-	$action = $_POST['action'];
+
+	$controleur = $_GET['controleur'];
+	$action = $_GET['action'];
 	
 	switch ($controleur){
 		case "controleurJoueur":

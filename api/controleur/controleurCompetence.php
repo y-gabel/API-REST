@@ -3,11 +3,11 @@
 	require_once("modele/competence.php");
 	class controleurCompetence {
 		public static function getCompetenceByID(){
-            if (!Util::verifPostArgs("idCompetence")){
+            if (!Util::verifGetArgs("idCompetence")){
                 echo(json_encode(Util::reponseMauvaiseRqt()));
                 return;
             }
-            $id = $_POST["idCompetence"];
+            $id = $_GET["idCompetence"];
 
 
             if ($rep = Competence::getCompetencByID($id)) {

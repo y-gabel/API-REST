@@ -4,12 +4,12 @@
 	class controleurZone {
 
 		public static function getNearestZones(){
-            if (!Util::verifPostArgs("latitude","longitude" )){
+            if (!Util::verifGetArgs("latitude","longitude" )){
                 echo(json_encode(Util::reponseMauvaiseRqt()));
                 return;
             }
-            $latitude = $_POST["latitude"];
-            $longitude = $_POST["longitude"];
+            $latitude = $_GET["latitude"];
+            $longitude = $_GET["longitude"];
 
 			if ($rep = Zone::getNearestZones($latitude,$longitude)) {
 			    $reponse = Util::reponseOk("Voici toutes les zones proches de la position actuelle",Util::formateTabJson($rep));
@@ -20,11 +20,11 @@
 		}
 
 		public static function getZoneById(){
-            if (!Util::verifPostArgs("id")){
+            if (!Util::verifGetArgs("id")){
                 echo(json_encode(Util::reponseMauvaiseRqt()));
                 return;
             }
-            $id = $_POST["id"];
+            $id = $_GET["id"];
 
 			if ($rep = Zone::getZoneById($id)) {
 				$reponse =Util::reponseOk('Voici la zone correspondante à l id : $id',$rep);

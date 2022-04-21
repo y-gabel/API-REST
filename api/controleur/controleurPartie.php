@@ -5,12 +5,12 @@
 
 		public static function getPartieByIdPartie(){
 
-            if (!Util::verifPostArgs("idPartie")){
+            if (!Util::verifGetArgs("idPartie")){
                 echo(json_encode(Util::reponseMauvaiseRqt()));
                 return;
             }
 
-            $idPartie = $_POST["idPartie"];
+            $idPartie = $_GET["idPartie"];
             if ($rep = Partie::getPartieByIdPartie($idPartie)) {
                 $reponse = Util::reponseOk("Voici la partie qui a pour id $idPartie ",$rep);
                 echo(json_encode($reponse));
@@ -32,14 +32,14 @@
 
 		public static function insertPartie(){
 
-            if (!Util::verifPostArgs("idPartie", "nbMaxJoueur", "tempsLimite")){
+            if (!Util::verifGetArgs("idPartie", "nbMaxJoueur", "tempsLimite")){
                 echo(json_encode(Util::reponseMauvaiseRqt()));
                 return;
             }
 
-            $idPartie = $_POST["idPartie"];
-            $nbMaxJoueur = $_POST["nbMaxJoueur"];
-            $tempsLimite = $_POST["tempsLimite"];
+            $idPartie = $_GET["idPartie"];
+            $nbMaxJoueur = $_GET["nbMaxJoueur"];
+            $tempsLimite = $_GET["tempsLimite"];
 
 			Partie::insertPartie($idPartie,$nbMaxJoueur,$tempsLimite,1,0);
             $reponse = Util::reponseOk("partie insérée");
@@ -47,12 +47,12 @@
 		}
 
 		public static function deletePartie(){
-            if (!Util::verifPostArgs("idPartie")){
+            if (!Util::verifGetArgs("idPartie")){
                 echo(json_encode(Util::reponseMauvaiseRqt()));
                 return;
             }
 
-            $idPartie = $_POST["idPartie"];
+            $idPartie = $_GET["idPartie"];
 			Partie::deletePartie($idPartie);
             $reponse = Util::reponseOk("partie deleted");
             echo(json_encode($reponse));
@@ -61,17 +61,17 @@
 
 		public static function updatePartie(){
 
-            if (!Util::verifPostArgs("idPartie", "nbMaxJoueur", "tempsLimite", "enCours", "estFinie")){
+            if (!Util::verifGetArgs("idPartie", "nbMaxJoueur", "tempsLimite", "enCours", "estFinie")){
                 echo(json_encode(Util::reponseMauvaiseRqt()));
                 return;
             }
 
 
-            $idPartie = $_POST["idPartie"];
-            $nbMaxJoueur = $_POST["nbMaxJoueur"];
-            $tempsLimite = $_POST["tempsLimite"];
-            $enCours = $_POST["enCours"];
-            $estFinie = $_POST["estFinie"];
+            $idPartie = $_GET["idPartie"];
+            $nbMaxJoueur = $_GET["nbMaxJoueur"];
+            $tempsLimite = $_GET["tempsLimite"];
+            $enCours = $_GET["enCours"];
+            $estFinie = $_GET["estFinie"];
 
             Partie::insertPartie($idPartie,$nbMaxJoueur,$tempsLimite,$enCours,$estFinie);
             $reponse = Util::reponseOk("Partie mise à jour");
