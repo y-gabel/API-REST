@@ -32,11 +32,11 @@
 
 
 		
-		static function getZoneById($id){
+		static function getZoneById($idZone){
 			$requetePreparee = "SELECT * FROM ZONE WHERE idZone = :i_tag";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
-				"i_tag" => $id
+				"i_tag" => $idZone
 			);
 			$req_prep->execute($valeurs);
 			$resultat = $req_prep->fetch(PDO::FETCH_ASSOC);
