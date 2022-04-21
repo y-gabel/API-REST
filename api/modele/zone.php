@@ -49,7 +49,7 @@
 		}
 		
 		static function getNearestZones($latitude,$longitude){
-			$requetePreparee = "SELECT latitudeZone, longitudeZone, SQRT(POW(69.1 * (latitudeZone - :la_tag), 2) + POW(69.1 * (:lo_tag - longitudeZone) * COS(latitudeZone / 57.3), 2)) AS distance
+			$requetePreparee = "SELECT idZone, rayonZone, margeRayonZone, nomZone, latitudeZone, longitudeZone, SQRT(POW(69.1 * (latitudeZone - :la_tag), 2) + POW(69.1 * (:lo_tag - longitudeZone) * COS(latitudeZone / 57.3), 2)) AS distance
 								FROM ZONE ORDER BY distance";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
 			$valeurs = array(
