@@ -31,17 +31,21 @@
 
 		public static function insertPartie(){
 
-            if (!Util::verifGetArgs("idPartie", "nbMaxJoueur", "tempsLimite")){
+            if (!Util::verifGetArgs("idPartie", "enCours", "datePartie", "estFinie", "nbMaxJoueur","tempsLimite")){
                 echo(json_encode(Util::reponseMauvaiseRqt()));
                 return;
             }
 
             $idPartie = $_GET["idPartie"];
+            $enCours = $_GET["enCours"];
+            $datePartie = $_GET["datePartie"];
+            $estFinie = $_GET["estFinie"];
             $nbMaxJoueur = $_GET["nbMaxJoueur"];
             $tempsLimite = $_GET["tempsLimite"];
 
-			Partie::insertPartie($idPartie,$nbMaxJoueur,$tempsLimite,1,0);
-            $reponse = Util::reponseOk("partie insérée");
+
+			Partie::insertPartie($idPartie,$enCours,$datePartie,$estFinie,$nbMaxJoueur,$tempsLimite);
+            $reponse = Util::reponseOk("Partie insérée");
             echo(json_encode($reponse));
 		}
 
@@ -53,29 +57,32 @@
 
             $idPartie = $_GET["idPartie"];
 			Partie::deletePartie($idPartie);
-            $reponse = Util::reponseOk("partie deleted");
+            $reponse = Util::reponseOk("Partie supprimer");
             echo(json_encode($reponse));
 
 		}
 
 		public static function updatePartie(){
 
-            if (!Util::verifGetArgs("idPartie", "nbMaxJoueur", "tempsLimite", "enCours", "estFinie")){
+            if (!Util::verifGetArgs("idPartie", "enCours", "datePartie", "estFinie", "nbMaxJoueur","tempsLimite")){
                 echo(json_encode(Util::reponseMauvaiseRqt()));
                 return;
             }
 
 
             $idPartie = $_GET["idPartie"];
+            $enCours = $_GET["enCours"];
+            $datePartie = $_GET["datePartie"];
+            $estFinie = $_GET["estFinie"];
             $nbMaxJoueur = $_GET["nbMaxJoueur"];
             $tempsLimite = $_GET["tempsLimite"];
-            $enCours = $_GET["enCours"];
-            $estFinie = $_GET["estFinie"];
 
-            Partie::insertPartie($idPartie,$nbMaxJoueur,$tempsLimite,$enCours,$estFinie);
+            Partie::updatePartie($idPartie,$enCours,$datePartie,$estFinie,$nbMaxJoueur,$tempsLimite);
             $reponse = Util::reponseOk("Partie mise à jour");
             echo(json_encode($reponse));
 
 		}
+
+
 	}
 ?>
