@@ -175,5 +175,14 @@
             	return new Participe($resultat);
             }
 		}
+
+		public static function finishPartie($idPartie){
+            $requetePreparee = "UPDATE Partie SET enCours = 0,finie=1 WHERE idPartie = :idPartie_tag;";
+            $req_prep = Connexion::pdo()->prepare($requetePreparee);
+            $valeurs = array(
+                "idPartie_tag" => $idPartie
+            );
+            $req_prep->execute($valeurs);
+        }
 	}
 ?>

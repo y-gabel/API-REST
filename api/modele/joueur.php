@@ -135,7 +135,25 @@
             }
         }
 
+        public static function leavePartie($idJoueur){
+            $unePartie = Joueur::getPartieActuel($idJoueur);
+            if ($unePartie){
+                $requetePreparee = "DELETE FROM Participe WHERE idJoueur = :id_tag and idPartie = :idPartie_tag";
+                $req_prep = Connexion::pdo()->prepare($requetePreparee);
+                $valeurs = array(
+                    "id_tag" => $idJoueur,
+                    "idPartie_tag" => $unePartie->getIdPartie()
+                );
 
+                try {
+                    $req_prep->execute($valeurs);
+                    return true;
+                }   catch (PDOException $e) {
+                    echo "erreur : " .$e->getMessage(). "<br>";
+                    return false;
+                }
+            }
+        }
         /**
 		 * Update un joueur dans la base de donnée
 		 *
@@ -270,7 +288,7 @@
             }
         }
         public static function getPartieActuel($idJoueur){
-            $requetePreparee = "SELECT * FROM PARTICIPE JOIN PARTIE ON PARTIE.idPartie = PARTICIPE.idPartie WHERE PARTICIPE.idJoueur = :i_tag and enCours = 1;";
+            $requetePreparee = "SELECT * FROM PARTICIPE JOIN PARTIE ON PARTIE.idPartie = PARTICIPE.idPartie WHERE PARTICIPE.idJoueur = :i_tag and finie = 0;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("i_tag" => $idJoueur);
             $req_prep->execute($valeurs);
