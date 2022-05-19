@@ -84,5 +84,21 @@
 		}
 
 
+        public function lancerPartie(){
+            if (!Util::verifGetArgs("idPartie")){
+                echo(json_encode(Util::reponseMauvaiseRqt()));
+                return;
+            }
+
+            $idPartie = $_GET["idPartie"];
+
+            if (Partie::lancerPartie($idPartie)){
+                $reponse = Util::reponseOk("Partie $idPartie lancée");
+                echo(json_encode($reponse));
+
+            } else {
+                echo(json_encode(Util::reponseMauvaiseRqt()));
+            }
+        }
 	}
 ?>

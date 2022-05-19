@@ -309,54 +309,16 @@
                 return $tab;
             }
         }
-        /*public static function getLesCompetencesUtilise($idJoueur)
-        {
-            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :id_tag and utilise = 1);";
+
+        public static function updatePosition($idJoueur,$idPartie,$latitude,$longitude){
+            $requetePreparee = "UPDATE PARTICIPE SET longitudeJoueur = :longitude_tag, latitudeJoueur = :latitude_tag WHERE idJoueur = :id_tag AND idPartie = :idPartie_tag";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("id_tag" => $idJoueur);
-
-            $req_prep->execute($valeurs);
-            $resultat = $req_prep->fetch(PDO::FETCH_ASSOC);
-            
-            if ($req_prep->rowCount() == 0){
-                return false;
-            } else {
-                new Competence($resultat);
-            }
-        }
-
-        kkk
-
-        */
-		
-		        public static function lancerPartie($idPartie)
-        {
-            $requetePreparee = "SELECT count(*) as nbJoueur, p.nbMaxJoueur FROM PARTIE p, PARTICIPE pa WHERE p.idPartie = pa.idPartie AND p.idPartie = :idPartie_tag
-             AND p.enCours = 0 AND p.finie = 0 GROUP BY p.idPartie HAVING count(*) < p.nbMaxJoueur";
-
-
-            $req_prep = Connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("idPartie_tag" => $idPartie);
-
-            $req_prep->execute($valeurs);
-            $resultat = $req_prep->fetch(PDO::FETCH_ASSOC);
-            
-            if ($req_prep->rowCount() == 0){
-                echo("ouhoPASOk");
-                return false;
-            
-            } else {
-                echo("ouhoOk");
-               Joueur::partieEnCours($idPartie);
-               return true;
-            }
-        }
-
-        public static function partieEnCours($idPartie) {
-
-            $requetePreparee = "UPDATE PARTIE SET enCours = 1 WHERE idPartie = :idPartie_tag";
-            $req_prep = Connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("idPartie_tag" => $idPartie);
+            $valeurs = array(
+                "longitude_tag" => $longitude,
+                "latitude_tag" => $latitude,
+                "id_tag" => $idJoueur,
+                "idPartie" => $idPartie
+            );
 
             try {
                 $req_prep->execute($valeurs);
