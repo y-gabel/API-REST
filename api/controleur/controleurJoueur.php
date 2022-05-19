@@ -3,7 +3,7 @@
 	require_once("modele/joueur.php");
         class controleurJoueur {
 
-            public static function getJoueurByMail(){
+           /* public static function getJoueurByMail(){
                 if (!Util::verifGetArgs("mail")){
                     echo(json_encode(Util::reponseMauvaiseRqt()));
                     return;
@@ -18,7 +18,7 @@
                      echo(json_encode(Util::reponseNonTrouver()));
                 }
 
-            }
+            }*/
 
             public static function getJoueurById(){
                 if (!Util::verifGetArgs("idJoueur")){
@@ -34,14 +34,111 @@
                 }
             }
 
-            public static function getLesParties(){
-                if (!Util::verifGetArgs("idJoueur")){
+            public static function getJoueurByIdGoogle(){
+                if (!Util::verifGetArgs("idGoogle")){
+                    echo(json_encode(Util::reponseMauvaiseRqt()));
+                    return;
+                }
+                $id = $_GET["idGoogle"];
+
+                if ( $unJoueur = Joueur::getJoueurByIdGoogle($id) ){
+                    echo(json_encode(Util::reponseOk("voici le joueur ayant pour idGoogle $id ",get_object_vars($unJoueur))));
+                } else {
+                    echo(json_encode(Util::reponseNonTrouver()));
+                }
+            }
+
+            public static function insertJoueur(){
+                if (!Util::verifGetArgs("idGoogle")){
                     echo(json_encode(Util::reponseMauvaiseRqt()));
                     return;
                 }
 
-                $idJoueur = $_GET["idJoueur"];
+                $idGoogle = $_GET["idGoogle"];
 
+                if ( $rep = Joueur::insertJoueur($idGoogle)){
+                    $reponse = Util::reponseOk("Joueur $idGoogle inséré",$rep);
+                    echo(json_encode($reponse));
+
+                } else {
+                    echo(json_encode(Util::reponseMauvaiseRqt()));
+                }
+            }
+
+            public static function leavePartie(){
+                if (!Util::verifGetArgs("idGoogle")){
+                    echo(json_encode(Util::reponseMauvaiseRqt()));
+                    return;
+                }
+                $id = $_GET["idGoogle"];
+                if ( $Joueur = Joueur::getJoueurByIdGoogle($id)){
+                    $idJoueur = $Joueur->getIdJoueur();
+                }
+                if ( $unJoueur = Joueur::leavePartie($idJoueur)){
+                    echo(json_encode(Util::reponseOk("le joueur ayant pour idJoueur $idJoueur à bien quitté la partie",get_object_vars($unJoueur))));
+                } else {
+                    echo(json_encode(Util::reponseNonTrouver()));
+
+                }
+            }
+
+            public static function updateSolde(){
+                if (!Util::verifGetArgs("idGoogle","solde" )){
+                    echo(json_encode(Util::reponseMauvaiseRqt()));
+                    return;
+                }
+
+                $idGoogle = $_GET["idGoogle"];
+                $solde = $_GET["solde"];
+                $leJoueur = Joueur::getJoueurByIdGoogle($idGoogle);
+
+                if ( $leJoueur && $rep = Joueur::updateSolde($leJoueur->getIdJoueur(),$solde)){
+                    $reponse = Util::reponseOk("Joueur $idGoogle updated",$rep);
+                    echo(json_encode($reponse));
+                } else {
+                    echo(json_encode(Util::reponseMauvaiseRqt()));
+                }
+
+            }
+
+            public static function deleteJoueurByGoogleID(){
+                if (!Util::verifGetArgs("idGoogle")){
+                    echo(json_encode(Util::reponseMauvaiseRqt()));
+                    return;
+                }
+                $id = $_GET["idGoogle"];
+
+                if ( $unJoueur = Joueur::deleteJoueurByGoogleID($id) ){
+                    echo(json_encode(Util::reponseOk("le joueur ayant pour idGoogle $id a bien été supprimé ",get_object_vars($unJoueur))));
+                } else {
+                    echo(json_encode(Util::reponseNonTrouver()));
+                }
+            }
+
+            public static function deleteJoueurByID(){
+                if (!Util::verifGetArgs("idJoueur")){
+                    echo(json_encode(Util::reponseMauvaiseRqt()));
+                    return;
+                }
+                $id = $_GET["idJoueur"];
+
+                if ( $unJoueur = Joueur::deleteJoueurByID($id) ){
+                    echo(json_encode(Util::reponseOk("Le joueur ayant pour idGoogle $id a bien été supprimé",get_object_vars($unJoueur))));
+                } else {
+                    echo(json_encode(Util::reponseNonTrouver()));
+                }
+            }
+
+            public static function getLesParties(){
+                if (!Util::verifGetArgs("idGoogle")){
+                    echo(json_encode(Util::reponseMauvaiseRqt()));
+                    return;
+                }
+                $id = $_GET["idGoogle"];
+                if ( $Joueur = Joueur::getJoueurByIdGoogle($id)){
+                    $idJoueur = $Joueur->getIdJoueur();
+                }
+;
                 if ( $rep = Joueur::getLesParties($idJoueur) ){
                     $reponse = Util::reponseOk("Voici les parties du joueur ayant pour id $idJoueur ",Util::formateTabJson($rep));
                     echo(json_encode($reponse));
@@ -52,11 +149,14 @@
             }
 
             public static function getPartieActuel(){
-                if (!Util::verifGetArgs("idJoueur")){
+                if (!Util::verifGetArgs("idGoogle")){
                     echo(json_encode(Util::reponseMauvaiseRqt()));
                     return;
                 }
-                $idJoueur = $_GET["idJoueur"];
+                $id = $_GET["idGoogle"];
+                if ( $Joueur = Joueur::getJoueurByIdGoogle($id)){
+                    $idJoueur = $Joueur->getIdJoueur();
+                }
 
                 if ( $rep = Joueur::getPartieActuel($idJoueur) ){
                     $reponse = Util::reponseOk("Voici la partie actuelle du joueur ayant pour id $idJoueur ",$rep);
@@ -66,16 +166,18 @@
                 }
             }
 
-
             public static function getLesCompetencesDebloques(){
-                if (!Util::verifGetArgs("idJoueur")){
+                if (!Util::verifGetArgs("idGoogle")){
                     echo(json_encode(Util::reponseMauvaiseRqt()));
                     return;
                 }
-                $id = $_GET["idJoueur"];
+                $id = $_GET["idGoogle"];
+                if ( $Joueur = Joueur::getJoueurByIdGoogle($id)){
+                    $idJoueur = $Joueur->getIdJoueur();
+                }
 
-                if ( $rep = Joueur::getLesCompetencesDebloques($id) ){
-                    $reponse = Util::reponseOk("voici les compétences debloqués pour le joueur ayant pour idJoueur $id ",Util::formateTabJson($rep));
+                if ( $rep = Joueur::getLesCompetencesDebloques($idJoueur) ){
+                    $reponse = Util::reponseOk("voici les compétences debloqués pour le joueur ayant pour idJoueur $idJoueur ",Util::formateTabJson($rep));
                      echo(json_encode($reponse));
 
                 } else {
@@ -83,15 +185,20 @@
                 }
 
             }
+
             public static function getLesCompetencesNonDebloques(){
-                if (!Util::verifGetArgs("idJoueur")){
+                if (!Util::verifGetArgs("idGoogle")){
                     echo(json_encode(Util::reponseMauvaiseRqt()));
                     return;
                 }
-                $id = $_GET["idJoueur"];
+                $id = $_GET["idGoogle"];
+                if ( $Joueur = Joueur::getJoueurByIdGoogle($id)){
+                    $idJoueur = $Joueur->getIdJoueur();
+                }
 
-                if ( $rep = Joueur::getLesCompetencesNonDebloques($id) ){
-                    $reponse = Util::reponseOk("voici les compétences non debloqués pour le joueur ayant pour idJoueur $id ",Util::formateTabJson($rep));
+
+                if ( $rep = Joueur::getLesCompetencesNonDebloques($idJoueur) ){
+                    $reponse = Util::reponseOk("voici les compétences non debloqués pour le joueur ayant pour idJoueur $idJoueur ",Util::formateTabJson($rep));
                      echo(json_encode($reponse));
 
                 } else {
@@ -115,46 +222,10 @@
                 }
             }*/
 
-
-            public static function updateSolde(){
-                if (!Util::verifGetArgs("idGoogle","solde" )){
-                    echo(json_encode(Util::reponseMauvaiseRqt()));
-                    return;
-                }
-
-                $idGoogle = $_GET["idGoogle"];
-                $solde = $_GET["solde"];
-                $leJoueur = Joueur::getJoueurByIdGoogle($idGoogle);
-
-                if ( $leJoueur && $rep = Joueur::updateSolde($leJoueur->getIdJoueur(),$solde)){
-                    $reponse = Util::reponseOk("Joueur $idGoogle updated",$rep);
-                     echo(json_encode($reponse));
-                } else {
-                     echo(json_encode(Util::reponseMauvaiseRqt()));
-                }
-
-            }
-
-            public static function insertJoueur(){
-                if (!Util::verifGetArgs("idGoogle")){
-                    echo(json_encode(Util::reponseMauvaiseRqt()));
-                    return;
-                }
-
-                $idGoogle = $_GET["idGoogle"];
-                if ( $rep = Joueur::insertJoueur($idGoogle)){
-                    $reponse = Util::reponseOk("Joueur $idGoogle inséré",$rep);
-                     echo(json_encode($reponse));
-
-                } else {
-                     echo(json_encode(Util::reponseMauvaiseRqt()));
-                }
-            }
-
             public static function ping(){
                 echo(json_encode(Util::reponseOk("Ping Ok")));
             }
-			
+
 			public function lancerPartie(){
                 if (!Util::verifGetArgs("idPartie")){
                     echo(json_encode(Util::reponseMauvaiseRqt()));
@@ -164,7 +235,7 @@
                 $idPartie = $_GET["idPartie"];
 
                 if (Joueur::lancerPartie($idPartie)){
-                    $reponse = Util::reponseOk("Partie $id lancée");
+                    $reponse = Util::reponseOk("Partie $idPartie lancée");
                     echo(json_encode($reponse));
 
                 } else {

@@ -1,4 +1,6 @@
-<?php 
+<?php
+require_once("modele/partie.php");
+require_once("modele/competence.php");
 	class Joueur {
 
  		/*------------------------------------------------------------------------------------------------------------------------------
@@ -89,7 +91,7 @@
 		 * 					
 		 */
 
-        public static function getJoueurByMail($mail){
+       /* public static function getJoueurByMail($mail){
             $requetePreparee = "SELECT * FROM JOUEUR WHERE mail = :m_tag ;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("m_tag" => $mail);
@@ -99,7 +101,7 @@
 
             $tabJoueur = $req_prep->fetch(PDO::FETCH_ASSOC);
 		    return  new Joueur($tabJoueur);
-        }
+        }*/
 
         /**
 		 * Retourne une array contenant les informations passé en parametre
@@ -138,7 +140,7 @@
         public static function leavePartie($idJoueur){
             $unePartie = Joueur::getPartieActuel($idJoueur);
             if ($unePartie){
-                $requetePreparee = "DELETE FROM Participe WHERE idJoueur = :id_tag and idPartie = :idPartie_tag";
+                $requetePreparee = "DELETE FROM PARTICIPE WHERE idJoueur = :id_tag and idPartie = :idPartie_tag";
                 $req_prep = Connexion::pdo()->prepare($requetePreparee);
                 $valeurs = array(
                     "id_tag" => $idJoueur,
@@ -273,7 +275,7 @@
 
         public static function getLesCompetencesDebloques($idJoueur)
         {
-            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence in (select idCompetence from ADebloque WHERE idJoueur = :id_tag);";
+            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence in (select idCompetence from ADEBLOQUE WHERE idJoueur = :id_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("id_tag" => $idJoueur);
 
@@ -292,7 +294,7 @@
         }
         public static function getLesCompetencesNonDebloques($idJoueur)
         {
-            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence not in (select idCompetence from ADebloque WHERE idJoueur = :id_tag);";
+            $requetePreparee = " SELECT * FROM COMPETENCE WHERE idCompetence not in (select idCompetence from ADEBLOQUE WHERE idJoueur = :id_tag);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array("id_tag" => $idJoueur);
 
