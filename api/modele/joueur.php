@@ -323,7 +323,11 @@
             } else {
                 new Competence($resultat);
             }
-        }*/
+        }
+
+        kkk
+
+        */
 		
 		        public static function lancerPartie($idPartie)
         {
