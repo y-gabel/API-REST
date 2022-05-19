@@ -154,6 +154,23 @@
             public static function ping(){
                 echo(json_encode(Util::reponseOk("Ping Ok")));
             }
+			
+			public function lancerPartie(){
+                if (!Util::verifGetArgs("idPartie")){
+                    echo(json_encode(Util::reponseMauvaiseRqt()));
+                    return;
+                }
+
+                $idPartie = $_GET["idPartie"];
+
+                if (Joueur::lancerPartie($idPartie)){
+                    $reponse = Util::reponseOk("Partie $id lancée");
+                    echo(json_encode($reponse));
+
+                } else {
+                    echo(json_encode(Util::reponseMauvaiseRqt()));
+                }
+            }
         }
 
 

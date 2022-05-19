@@ -324,4 +324,42 @@
                 new Competence($resultat);
             }
         }*/
+		
+		        public static function lancerPartie($idPartie)
+        {
+            $requetePreparee = "SELECT count(*) as nbJoueur, p.nbMaxJoueur FROM PARTIE p, PARTICIPE pa WHERE p.idPartie = pa.idPartie AND p.idPartie = :idPartie_tag
+             AND p.enCours = 0 AND p.finie = 0 GROUP BY p.idPartie HAVING count(*) < p.nbMaxJoueur";
+
+
+            $req_prep = Connexion::pdo()->prepare($requetePreparee);
+            $valeurs = array("idPartie_tag" => $idPartie);
+
+            $req_prep->execute($valeurs);
+            $resultat = $req_prep->fetch(PDO::FETCH_ASSOC);
+            
+            if ($req_prep->rowCount() == 0){
+                echo("ouhoPASOk");
+                return false;
+            
+            } else {
+                echo("ouhoOk");
+               Joueur::partieEnCours($idPartie);
+               return true;
+            }
+        }
+
+        public static function partieEnCours($idPartie) {
+
+            $requetePreparee = "UPDATE PARTIE SET enCours = 1 WHERE idPartie = :idPartie_tag";
+            $req_prep = Connexion::pdo()->prepare($requetePreparee);
+            $valeurs = array("idPartie_tag" => $idPartie);
+
+            try {
+                $req_prep->execute($valeurs);
+                return true;
+            }   catch (PDOException $e) {
+                echo "erreur : " .$e->getMessage(). "<br>";
+                return false;
+            }
+        }
 }
