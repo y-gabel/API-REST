@@ -6,10 +6,8 @@
 		------------------------------------------------------------------------------------------------------------------------------*/
 
 		public $idJoueur;
-        public $mail;
-        public $password;
         public $dateInscription;
-        public $pseudo;
+        public $idGoogle;
         public $solde;
 
         /*------------------------------------------------------------------------------------------------------------------------------
@@ -17,10 +15,8 @@
 		------------------------------------------------------------------------------------------------------------------------------*/
 
         public function getIdJoueur(){ return $this->idJoueur; }
-        public function getMail(){ return $this->mail; }
-        public function getPassword(){ return $this->password; }
         public function getDateInscription(){ return $this->dateInscription; }
-        public function getPseudo(){ return $this->pseudo; }
+        public function getIdGoogle(){ return $this->idGoogle; }
         public function getSolde(){ return $this->solde; }
 
         /*------------------------------------------------------------------------------------------------------------------------------
@@ -28,10 +24,8 @@
 		------------------------------------------------------------------------------------------------------------------------------*/
 
         public function setIdJoueur($idJoueur){ $this->idJoueur = $idJoueur;}
-        public function setMail($mail){ $this->mail = $mail;}
-        public function setPassword($password){ $this->password = $password;}
         public function setDateInscription($dateInscription){ $this->dateInscription = $dateInscription;}
-        public function setPseudo($pseudo){ $this->pseudo = $pseudo;}
+        public function setIdGoogle($idGoogle){ $this->idGoogle = $idGoogle;}
         public function setSolde($solde){ $this->solde = $solde;}
 
         /*------------------------------------------------------------------------------------------------------------------------------
@@ -40,10 +34,8 @@
 
         public function __construct($tab){
             $this->idJoueur = $tab["idJoueur"];
-            $this->mail = $tab["mail"];
-            $this->password = $tab["password"];
             $this->dateInscription = $tab["dateInscription"];
-            $this->pseudo = $tab["pseudo"];
+            $this->idGoogle = $tab["idGoogle"];
             $this->solde = $tab["solde"];
         }
 
@@ -73,6 +65,20 @@
             $tabJoueur = $req_prep->fetch(PDO::FETCH_ASSOC);
             return new Joueur($tabJoueur);
         }
+
+        public static function getJoueurByIdGoogle($idGoogle){
+            $requetePreparee = "SELECT * FROM JOUEUR where idGoogle = :idGoogle_tag";
+            $req_prep = Connexion::pdo()->prepare($requetePreparee);
+            $valeurs = array(
+                "idGoogle_tag" => $idGoogle
+            );
+            $req_prep->execute($valeurs);
+            if ($req_prep->rowCount() == 0) { return false;}
+
+            $tabJoueur = $req_prep->fetch(PDO::FETCH_ASSOC);
+            return new Joueur($tabJoueur);
+        }
+
         /**
 		 * Retourne le joueur ayant pour mail, le mail passé en paramètre
 		 *
@@ -112,18 +118,12 @@
 		 * 					
 		 */
 
-        public static function insertJoueur($idJoueur, $mail, $password, $dateInscription, $pseudo, $solde) {
+        public static function insertJoueur($idGoogle) {
 
-            $requetePreparee = "INSERT INTO JOUEUR (idJoueur, mail, password, dateInscription, pseudo, solde) 
-            VALUES (:id_tag, :mail_tag, :pass_tag, :dateInsc_tag, :pseudo_tag, :solde_tag );";
+            $requetePreparee = "INSERT INTO JOUEUR (idGoogle,dateInscription, solde) VALUES (:idGoogle_tag, now() , 0);";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array(
-                "id_tag" => $idJoueur,
-                "mail_tag" => $mail,
-                "pass_tag" => $password,
-                "dateInsc_tag" => $dateInscription,
-                "pseudo_tag" => $pseudo,
-                "solde_tag" => $solde
+                "idGoogle_tag" => $idGoogle
             );
 
             try {
@@ -170,17 +170,12 @@
 		 * 					
 		 */
 
-        public static function updateJoueur($idJoueur, $mail, $password, $dateInscription, $pseudo, $solde){
+        public static function updateSolde($idJoueur, $solde){
             //$mdpHash = util::hash(mdp);
-            $requetePreparee = "UPDATE JOUEUR SET mail = :mail_tag, password = :pass_tag, dateInscription = :dateInsc_tag, pseudo = :pseudo_tag, solde = :solde_tag
-            WHERE idJoueur = :id_tag;";
+            $requetePreparee = "UPDATE JOUEUR SET solde = :solde_tag WHERE idJoueur = :id_tag;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
             $valeurs = array(
                 "id_tag" => $idJoueur,
-                "mail_tag" => $mail,
-                "pass_tag" => $password,
-                "dateInsc_tag" => $dateInscription,
-                "pseudo_tag" => $pseudo,
                 "solde_tag" => $solde
             );
 
@@ -203,10 +198,10 @@
 		 * 					
 		 */
 
-        public static function deleteJoueurByMail($mail){
-            $requetePreparee = "DELETE FROM JOUEUR WHERE mail = :mail_tag ;";
+        public static function deleteJoueurByGoogleID($idGoogle){
+            $requetePreparee = "DELETE FROM JOUEUR WHERE idGoogle = :idGoogle_tag ;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("mail_tag" => $mail);
+            $valeurs = array("idGoogle_tag" => $idGoogle);
         
             try {
                 $req_prep->execute($valeurs);
@@ -243,32 +238,6 @@
 		 * @return array contenant toutes les informations passé en paramètre  
 		 * 					
 		 */
-
-        /**
-		 * Vérifie si le mot de passe est bien celui inscrit sur la BDD
-		 *
-		 * @param Int $id correspondant à l'id du joueur
-		 * @param String $pass corespondant au mdp crypté du joueur
-		 * 
-		 * @author Gabel Yanis <yanis.gabel@universite-paris-saclay.fr>
-		 * @return Bool retourne vrai si le mdp passé en parametre correspopont bien à celui dans la base de donnée (crypté)
-		 * 					
-		 */
-
-        public static function checkMDP($idJoueur,$password) {
-            $requetePreparee = "SELECT * FROM JOUEUR WHERE idJoueur = :id_tag and password = :pass_tag;";
-            $req_prep = connexion::pdo()->prepare($requetePreparee);
-            $valeurs = array("id_tag" => $idJoueur, "pass_tag" => $password);
-            $req_prep->execute($valeurs);
-            $req_prep->setFetchMode(PDO::FETCH_CLASS,"utilisateur");
-            $tabUtilisateurs = $req_prep->fetchAll();
-            if (sizeof($tabUtilisateurs) == 1)
-                return true;
-            else
-                return false;
-        }
-
-
 
         public static function getLesParties($idJoueur){
             $requetePreparee = "SELECT * FROM PARTIE WHERE idPartie in (select idPartie from PARTICIPE WHERE idJoueur = :id_tag);";

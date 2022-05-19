@@ -66,26 +66,6 @@
                 }
             }
 
-            public static function checkMDP(){
-
-                if (!Util::verifGetArgs("idJoueur","password")){
-                    echo(json_encode(Util::reponseMauvaiseRqt()));
-                    return;
-                }
-
-                $id = $_GET["idJoueur"];
-                $pass = $_GET["password"];
-
-
-                if ( $rep = Joueur::checkMDP($id,$pass) ){
-                    $reponse = Util::reponseOk("mdp ok",$rep);
-                     echo(json_encode($reponse));
-
-                } else {
-                     echo(json_encode(Util::reponseNonTrouver()));
-                }
-
-            }
 
             public static function getLesCompetencesDebloques(){
                 if (!Util::verifGetArgs("idJoueur")){
@@ -119,7 +99,7 @@
                 }
 
             }
-            public static function getLesCompetencesUtilise(){
+           /* public static function getLesCompetencesUtilise(){
                 if (!Util::verifGetArgs("idJoueur")){
                     echo(json_encode(Util::reponseMauvaiseRqt()));
                     return;
@@ -133,40 +113,21 @@
                 } else {
                      echo(json_encode(Util::reponseNonTrouver()));
                 }
-            }
+            }*/
 
-            public static function deleteJoueurByMail(){
-                if (!Util::verifGetArgs("mail")){
+
+            public static function updateSolde(){
+                if (!Util::verifGetArgs("idGoogle","solde" )){
                     echo(json_encode(Util::reponseMauvaiseRqt()));
                     return;
                 }
-                $mail = $_GET["mail"];
 
-                if ( $rep = Joueur::deleteJoueurByMail($mail) ){
-                    $reponse = Util::reponseOk("Joueur deleted",$rep);
-                     echo(json_encode($reponse));
+                $idGoogle = $_GET["idGoogle"];
+                $solde = $_GET["solde"];
+                $leJoueur = Joueur::getJoueurByIdGoogle($idGoogle);
 
-                } else {
-                     echo(json_encode(Util::reponseNonTrouver()));
-                }
-
-            }
-
-            public static function updateJoueur(){
-                if (!Util::verifGetArgs("idJoueur","mail","password", "nom", "prenom", "thunasse" ,"niveau" )){
-                    echo(json_encode(Util::reponseMauvaiseRqt()));
-                    return;
-                }
-                    $id = $_GET["idJoueur"];
-                    $mail = $_GET["mail"];
-                    $pass = $_GET["password"];
-                    $nom = $_GET["nom"];
-                    $pre = $_GET["prenom"];
-                    $thune = $_GET["thunasse"];
-                    $niv = $_GET["niveau"];
-
-                if ( $rep = Joueur::updateJoueur($id, $mail, $pass, $nom, $pre, $thune, $niv)){
-                    $reponse = Util::reponseOk("Joueur $id updated",$rep);
+                if ( $leJoueur && $rep = Joueur::updateSolde($leJoueur->getIdJoueur(),$solde)){
+                    $reponse = Util::reponseOk("Joueur $idGoogle updated",$rep);
                      echo(json_encode($reponse));
                 } else {
                      echo(json_encode(Util::reponseMauvaiseRqt()));
@@ -175,27 +136,23 @@
             }
 
             public static function insertJoueur(){
-                if (!Util::verifGetArgs("idJoueur","mail","password", "nom", "prenom", "thunasse" ,"niveau" ,"dateInscription")){
+                if (!Util::verifGetArgs("idGoogle")){
                     echo(json_encode(Util::reponseMauvaiseRqt()));
                     return;
                 }
 
-                $id = $_GET["idJoueur"];
-                $mail = $_GET["mail"];
-                $pass = $_GET["password"];
-                $dateInsc = $_GET["dateInscription"];
-                $nom = $_GET["nom"];
-                $pre = $_GET["prenom"];
-                $thune = $_GET["thunasse"];
-                $niv = $_GET["niveau"];
-
-                if ( $rep = Joueur::insertJoueur($id, $mail, $pass, $dateInsc, $nom, $pre, $thune, $niv)){
-                    $reponse = Util::reponseOk("Joueur $id inséré",$rep);
+                $idGoogle = $_GET["idGoogle"];
+                if ( $rep = Joueur::insertJoueur($idGoogle)){
+                    $reponse = Util::reponseOk("Joueur $idGoogle inséré",$rep);
                      echo(json_encode($reponse));
 
                 } else {
                      echo(json_encode(Util::reponseMauvaiseRqt()));
                 }
+            }
+
+            public static function ping(){
+                echo(json_encode(Util::reponseOk("Ping Ok")));
             }
         }
 
