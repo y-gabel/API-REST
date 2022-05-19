@@ -12,6 +12,9 @@
         public $idZone;
         public $participants = array();
 
+        public $latitude = -1;
+        public $longitude = -1;
+
 		public function __construct($tab){
 				$this->idPartie = $tab["idPartie"];
                 $this->enCours = $tab["enCours"];

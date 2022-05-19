@@ -31,7 +31,20 @@
 		public function setNomZone($nomZone){			 $this->nomZone = $nomZone; 				}
 
 
-		
+        static function getAllZones(){
+            $tab = array();
+            $requete = "SELECT * FROM ZONE;";
+            $resultat = Connexion::pdo()->query($requete);
+
+            $tableau = $resultat->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach($tableau as $key => $val){
+                $tab[] = new Zone($val);
+            }
+
+            return $tab;
+        }
+
 		static function getZoneById($idZone){
 			$requetePreparee = "SELECT * FROM ZONE WHERE idZone = :i_tag";
 			$req_prep = Connexion::pdo()->prepare($requetePreparee);
