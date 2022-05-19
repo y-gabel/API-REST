@@ -12,6 +12,9 @@
         public $idZone;
         public $participants = array();
 
+        public $latitude = -1;
+        public $longitude = -1;
+
 		public function __construct($tab){
 				$this->idPartie = $tab["idPartie"];
                 $this->enCours = $tab["enCours"];
@@ -176,6 +179,43 @@
             }
 		}
 
+        public static function lancerPartie($idPartie)
+        {
+            $requetePreparee = "SELECT count(*) as nbJoueur, p.nbMaxJoueur FROM PARTIE p, PARTICIPE pa WHERE p.idPartie = pa.idPartie AND p.idPartie = :idPartie_tag
+             AND p.enCours = 0 AND p.finie = 0 GROUP BY p.idPartie HAVING count(*) < p.nbMaxJoueur";
+
+            $req_prep = Connexion::pdo()->prepare($requetePreparee);
+            $valeurs = array("idPartie_tag" => $idPartie);
+
+            $req_prep->execute($valeurs);
+            $resultat = $req_prep->fetch(PDO::FETCH_ASSOC);
+
+            if ($req_prep->rowCount() == 0){
+                echo("ouhoPASOk");
+                return false;
+
+            } else {
+                echo("ouhoOk");
+                Partie::partieEnCours($idPartie);
+                return true;
+            }
+        }
+
+        public static function partieEnCours($idPartie) {
+
+            $requetePreparee = "UPDATE PARTIE SET enCours = 1 WHERE idPartie = :idPartie_tag";
+            $req_prep = Connexion::pdo()->prepare($requetePreparee);
+            $valeurs = array("idPartie_tag" => $idPartie);
+
+            try {
+                $req_prep->execute($valeurs);
+                return true;
+            }   catch (PDOException $e) {
+                echo "erreur : " .$e->getMessage(). "<br>";
+                return false;
+            }
+        }
+
 		public static function finishPartie($idPartie){
             $requetePreparee = "UPDATE Partie SET enCours = 0,finie=1 WHERE idPartie = :idPartie_tag;";
             $req_prep = Connexion::pdo()->prepare($requetePreparee);
@@ -183,6 +223,18 @@
                 "idPartie_tag" => $idPartie
             );
             $req_prep->execute($valeurs);
+        }
+
+        public static function checkCanStart($idPartie){
+		    $requetePreparee = "select (SELECT Count(*) from PARTICIPE P WHERE idPartie = :idPartie_tag) = (SELECT Count(*) from PARTICIPE P WHERE idPartie = :idPartie_tag and ready = 1) as bool";
+		    $req_prep = Connexion::pdo()->prepare($requetePreparee);
+		    $valeurs = array(
+		        "idPartie_tag" => $idPartie
+            );
+		    $req_prep->execute($valeurs);
+            $resultat = $req_prep->fetch(PDO::FETCH_ASSOC);
+
+            return intval(resultat["bool"]) == 1;
         }
 	}
 ?>
